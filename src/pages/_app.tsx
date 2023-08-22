@@ -7,7 +7,7 @@ import { type AppType } from "next/dist/shared/lib/utils";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import ComposeApolloClient from "~/api/composedb/client";
-import NoAccess from "~/pages/NoAccess";
+import Login from "~/pages/login";
 import "~/styles/globals.css";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
@@ -26,17 +26,17 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     return (
       <ApolloProvider client={client}>
         <Head>
-          <title>Nabu</title>
-          <meta name="description" content="DAO social tooling" />
+          <title>Tartarus</title>
+          <meta name="description" content="mystikó" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
         {/* <Layout> */}
-        <Component {...pageProps} setProviderSigner={setProviderSigner} />
+        <Component {...pageProps} />
         {/* </Layout> */}
       </ApolloProvider>
     );
 
-  return <NoAccess />;
+  return <Login setProvider={setProviderSigner} />;
 };
 
 export default MyApp;
