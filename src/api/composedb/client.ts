@@ -14,7 +14,7 @@ import { definition } from "~/api/composedb/runtime";
 import { env } from "~/env.mjs";
 import { ethers } from "ethers";
 
-export const ethWindowProvider = async () => {
+export const getEthWindowProvider = async () => {
   const provider = new ethers.BrowserProvider(window.ethereum);
   await provider.send("eth_requestAccounts", []);
   const signer = await provider.getSigner();
@@ -25,7 +25,7 @@ export const ethWindowProvider = async () => {
 const ComposeApolloClient = async ({
   provider,
   signer,
-}: Awaited<ReturnType<typeof ethWindowProvider>>) => {
+}: Awaited<ReturnType<typeof getEthWindowProvider>>) => {
   try {
     // Prompt injected provider (metamask or another client wallet with injected provider) for connection to Nabu
     const [address] = await signer.getAddress();

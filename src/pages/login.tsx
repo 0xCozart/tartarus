@@ -1,11 +1,40 @@
-import React, { type Dispatch, type SetStateAction } from "react";
+import { type BrowserProvider } from "ethers";
+import {
+  type Dispatch,
+  type MouseEventHandler,
+  type SetStateAction,
+} from "react";
+import { getEthWindowProvider } from "~/api/composedb/client";
+import { MetamaskButton } from "~/components/buttons";
 
 type LoginProps = {
-  setProvider: Dispatch<SetStateAction<undefined>>;
+  provider: BrowserProvider;
+  setProvider: Dispatch<SetStateAction<BrowserProvider>>;
 };
 
-const Login = ({ setProvider }: LoginProps) => {
-  return <div></div>;
+const Login = ({ provider, setProvider }: LoginProps) => {
+  const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.preventDefault();
+
+    getEthWindowProvider()
+      .then(({ provider, signer }) => {
+        if (!signer) {
+          throw Error("not authed");
+        } else setProvider(provider);
+      })
+      .catch(console.error);
+  };
+
+  !provider ? (
+    <div className="">
+      <MetamaskButton handleClick={handleClick}></MetamaskButton>
+    </div>
+  ) : (
+    <Terminal />
+  );
 };
 
 export default Login;
+
+
+TOUCHING GRASSSSSSSSSSSSSSS
