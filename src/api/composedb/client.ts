@@ -14,6 +14,11 @@ import { definition } from "~/api/composedb/runtime";
 import { env } from "~/env.mjs";
 import { ethers } from "ethers";
 
+export type EthProvider = {
+  provider: ethers.BrowserProvider;
+  signer: ethers.JsonRpcSigner;
+};
+
 export const getEthWindowProvider = async () => {
   const provider = new ethers.BrowserProvider(window.ethereum);
   await provider.send("eth_requestAccounts", []);

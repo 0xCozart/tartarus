@@ -6,6 +6,7 @@ import {
 } from "react";
 import { getEthWindowProvider } from "~/api/composedb/client";
 import { MetamaskButton } from "~/components/buttons";
+import Terminal from "~/components/terminal";
 
 type LoginProps = {
   provider: BrowserProvider;
@@ -25,7 +26,7 @@ const Login = ({ provider, setProvider }: LoginProps) => {
       .catch(console.error);
   };
 
-  !provider ? (
+  return !provider ? (
     <div className="">
       <MetamaskButton handleClick={handleClick}></MetamaskButton>
     </div>
@@ -35,6 +36,3 @@ const Login = ({ provider, setProvider }: LoginProps) => {
 };
 
 export default Login;
-
-
-TOUCHING GRASSSSSSSSSSSSSSS

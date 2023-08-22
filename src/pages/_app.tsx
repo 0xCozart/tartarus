@@ -6,13 +6,16 @@ import {
 import { type AppType } from "next/dist/shared/lib/utils";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import ComposeApolloClient from "~/api/composedb/client";
+import ComposeApolloClient, {
+  type getEthWindowProvider,
+} from "~/api/composedb/client";
 import Login from "~/pages/login";
 import "~/styles/globals.css";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const [client, setClient] = useState<ApolloClient<NormalizedCacheObject>>();
-  const [providerSigner, setProviderSigner] = useState();
+  const [providerSigner, setProviderSigner] =
+    useState<Awaited<ReturnType<typeof getEthWindowProvider>>>();
 
   useEffect(() => {
     if (providerSigner) {
@@ -31,7 +34,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         {/* <Layout> */}
-        <Component {...pageProps} />
+        <Component {...pageProps} providerSigner={providerSigner} />
         {/* </Layout> */}
       </ApolloProvider>
     );
