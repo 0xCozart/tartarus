@@ -6,24 +6,21 @@ import {
 import { type AppType } from "next/dist/shared/lib/utils";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import ComposeApolloClient, {
-  type getEthWindowProvider,
-} from "~/api/composedb/client";
+import ComposeApolloClient, { type EthProvider } from "~/api/composedb/client";
 import Login from "~/pages/login";
 import "~/styles/globals.css";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const [client, setClient] = useState<ApolloClient<NormalizedCacheObject>>();
-  const [providerSigner, setProviderSigner] =
-    useState<Awaited<ReturnType<typeof getEthWindowProvider>>>();
+  const [ethProvider, setEthProvider] = useState<Awaited<EthProvider>>();
 
   useEffect(() => {
-    if (providerSigner) {
-      ComposeApolloClient(providerSigner)
+    if (ethProvider) {
+      ComposeApolloClient(ethProvider)
         .then((authedClient) => setClient(authedClient))
         .catch(console.error);
     }
-  }, [providerSigner]);
+  }, [ethProvider]);
 
   if (client)
     return (
@@ -34,12 +31,12 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         {/* <Layout> */}
-        <Component {...pageProps} providerSigner={providerSigner} />
+        <Component {...pageProps} ethProvider={ethProvider} />
         {/* </Layout> */}
       </ApolloProvider>
     );
 
-  return <Login setProvider={setProviderSigner} />;
+  return <Login ethProvider={ethProvider} setEthProvider={setEthProvider} />;
 };
 
 export default MyApp;

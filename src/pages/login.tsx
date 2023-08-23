@@ -1,19 +1,17 @@
-import { type BrowserProvider } from "ethers";
 import {
   type Dispatch,
   type MouseEventHandler,
   type SetStateAction,
 } from "react";
-import { getEthWindowProvider } from "~/api/composedb/client";
+import { getEthWindowProvider, type EthProvider } from "~/api/composedb/client";
 import { MetamaskButton } from "~/components/buttons";
-import Terminal from "~/components/terminal";
 
 type LoginProps = {
-  provider: BrowserProvider;
-  setProvider: Dispatch<SetStateAction<BrowserProvider>>;
+  ethProvider: EthProvider | undefined;
+  setEthProvider: Dispatch<SetStateAction<EthProvider>>;
 };
 
-const Login = ({ provider, setProvider }: LoginProps) => {
+const Login = ({ ethProvider, setEthProvider }: LoginProps) => {
   const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
 
@@ -21,17 +19,17 @@ const Login = ({ provider, setProvider }: LoginProps) => {
       .then(({ provider, signer }) => {
         if (!signer) {
           throw Error("not authed");
-        } else setProvider(provider);
+        } else setEthProvider({ provider, signer });
       })
       .catch(console.error);
   };
 
-  return !provider ? (
+  return !ethProvider ? (
     <div className="">
       <MetamaskButton handleClick={handleClick}></MetamaskButton>
     </div>
   ) : (
-    <Terminal />
+    <LandingTerminal />
   );
 };
 

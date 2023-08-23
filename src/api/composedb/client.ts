@@ -30,7 +30,7 @@ export const getEthWindowProvider = async () => {
 const ComposeApolloClient = async ({
   provider,
   signer,
-}: Awaited<ReturnType<typeof getEthWindowProvider>>) => {
+}: Awaited<EthProvider>) => {
   try {
     // Prompt injected provider (metamask or another client wallet with injected provider) for connection to Nabu
     const [address] = await signer.getAddress();
