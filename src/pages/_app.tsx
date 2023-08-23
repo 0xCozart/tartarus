@@ -15,12 +15,15 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   const [ethProvider, setEthProvider] = useState<Awaited<EthProvider>>();
 
   useEffect(() => {
-    if (ethProvider) {
+    if (ethProvider && !client) {
       ComposeApolloClient(ethProvider)
         .then((authedClient) => setClient(authedClient))
         .catch(console.error);
     }
-  }, [ethProvider]);
+  }, [ethProvider, client]);
+
+  if (!client)
+    return <Login ethProvider={ethProvider} setEthProvider={setEthProvider} />;
 
   if (client)
     return (
@@ -35,8 +38,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         {/* </Layout> */}
       </ApolloProvider>
     );
-
-  return <Login ethProvider={ethProvider} setEthProvider={setEthProvider} />;
 };
 
 export default MyApp;

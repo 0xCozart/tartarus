@@ -5,10 +5,11 @@ import {
 } from "react";
 import { getEthWindowProvider, type EthProvider } from "~/api/composedb/client";
 import { MetamaskButton } from "~/components/buttons";
+import LandingTerminal from "~/components/landingTerminal";
 
 type LoginProps = {
   ethProvider: EthProvider | undefined;
-  setEthProvider: Dispatch<SetStateAction<EthProvider>>;
+  setEthProvider: Dispatch<SetStateAction<EthProvider | undefined>>;
 };
 
 const Login = ({ ethProvider, setEthProvider }: LoginProps) => {
@@ -29,7 +30,10 @@ const Login = ({ ethProvider, setEthProvider }: LoginProps) => {
       <MetamaskButton handleClick={handleClick}></MetamaskButton>
     </div>
   ) : (
-    <LandingTerminal />
+    <LandingTerminal
+      provider={ethProvider.provider}
+      signer={ethProvider.signer}
+    />
   );
 };
 
