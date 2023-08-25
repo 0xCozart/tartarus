@@ -15,16 +15,29 @@ import { ethers } from "ethers";
 import { definition } from "~/api/composedb/runtime";
 import { env } from "~/env.mjs";
 
-export type EthProvider = {
-  provider: ethers.BrowserProvider;
-  signer: ethers.JsonRpcSigner;
-};
+//this is so sick xd
+export type EthProvider = Awaited<ReturnType<typeof getEthWindowProvider>>;
 
+// need to update to ether v6
 export const getEthWindowProvider = async () => {
-  const provider = new ethers.BrowserProvider(window.ethereum);
-  await provider.send("eth_requestAccounts", []);
-  const signer = await provider.getSigner();
-  return { provider, signer };
+  try {
+    let signer = null;
+
+    let provider;
+    if (window.ethereum == null) {
+      console.log("MetaMask not installed; using read-only defaults");
+      provider = ethers.getDefaultProvider(env.NEXT_PUBLIC_LAVA_GATEWAY);
+      console.log({ provider, signer });
+    } else {
+      provider = new ethers.BrowserProvider(window.ethereum);
+      signer = await provider.getSigner();
+      console.log({ provider, signer });
+    }
+    return { provider, signer, error: null };
+  } catch (error) {
+    console.error(error);
+    return { provider: null, signer: null, error: error };
+  }
 };
 
 // returns a new session or a non-expired local session
@@ -55,6 +68,7 @@ const ComposeApolloClient = async ({
   signer,
 }: Awaited<EthProvider>) => {
   try {
+    if (!signer) throw Error("user did not authenticate");
     // Prompt injected provider (metamask or another client wallet with injected provider) for connection to Nabu
     const [address] = await signer.getAddress();
     if (!address) throw Error("no signer address found");
