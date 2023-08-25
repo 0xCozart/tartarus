@@ -32,11 +32,12 @@ export const getEthWindowProvider = async () => {
       provider = new ethers.BrowserProvider(window.ethereum);
       signer = await provider.getSigner();
       console.log({ provider, signer });
+      if (!provider) throw new Error("something went wrong");
     }
-    return { provider, signer, error: null };
+    return { provider, signer };
   } catch (error) {
     console.error(error);
-    return { provider: null, signer: null, error: error };
+    return { provider: undefined, signer: undefined };
   }
 };
 

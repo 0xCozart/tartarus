@@ -9,11 +9,11 @@ import Terminal from "~/components/terminal";
 
 type LoginProps = {
   ethProvider: EthProvider;
-  setEthProvider: Dispatch<SetStateAction<Partial<EthProvider>>>;
+  setEthProvider: Dispatch<SetStateAction<EthProvider>>;
 };
 
 const Login = ({ ethProvider, setEthProvider }: LoginProps) => {
-  const { provider, signer, error } = ethProvider;
+  const { provider, signer } = ethProvider;
   const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
 
@@ -21,7 +21,8 @@ const Login = ({ ethProvider, setEthProvider }: LoginProps) => {
       .then(({ provider, signer }) => {
         if (!signer) {
           throw Error("not authed");
-        } else setEthProvider({ provider, signer });
+        }
+        if (provider) setEthProvider({ provider, signer });
       })
       .catch(console.error);
   };
@@ -42,7 +43,7 @@ const Login = ({ ethProvider, setEthProvider }: LoginProps) => {
       </div>
     </div>
   ) : (
-    <Terminal provider={provider} signer={signer} error={error} />
+    <Terminal provider={provider} signer={signer} />
   );
 };
 

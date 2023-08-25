@@ -12,7 +12,10 @@ import "~/styles/globals.css";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const [client, setClient] = useState<ApolloClient<NormalizedCacheObject>>();
-  const [ethProvider, setEthProvider] = useState<Awaited<EthProvider>>();
+  const [ethProvider, setEthProvider] = useState<Awaited<EthProvider>>({
+    provider: undefined,
+    signer: undefined,
+  });
 
   useEffect(() => {
     if (ethProvider && !client) {
