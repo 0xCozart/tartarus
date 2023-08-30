@@ -21,23 +21,24 @@ export type EthProvider = Awaited<ReturnType<typeof getEthWindowProvider>>;
 // need to update to ether v6
 export const getEthWindowProvider = async () => {
   try {
-    let signer = null;
-
     let provider;
-    if (window.ethereum == null) {
-      console.log("MetaMask not installed; using read-only defaults");
-      provider = ethers.getDefaultProvider(env.NEXT_PUBLIC_LAVA_GATEWAY);
-      console.log({ provider, signer });
-    } else {
-      provider = new ethers.BrowserProvider(window.ethereum);
-      signer = await provider.getSigner();
-      console.log({ provider, signer });
-      if (!provider) throw new Error("something went wrong");
+    let signer;
+    if (window.ethereum) {
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+      // console.log({ provider, signer });
+      await provider.send("eth_requestAccounts", []);
+
+      signer = provider.getSigner();
+      // } else {
+      //   provider = new ethers.BrowserProvider(window.ethereum);
+      //   signer = await provider.getSigner();
+      //   console.log({ provider, signer });
+      //   if (!provider) throw new Error("something went wrong");
     }
     return { provider, signer };
   } catch (error) {
     console.error(error);
-    return { provider: undefined, signer: undefined };
+    return { provider: null, signer: null };
   }
 };
 
