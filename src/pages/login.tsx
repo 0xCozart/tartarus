@@ -17,14 +17,8 @@ const Login = ({ ethProvider, setEthProvider }: LoginProps) => {
   const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
 
-    getEthWindowProvider()
-      .then(({ provider, signer }) => {
-        if (!signer) {
-          throw Error("not authed");
-        }
-        if (provider) setEthProvider({ provider, signer });
-      })
-      .catch(console.error);
+    const provider = getEthWindowProvider();
+    setEthProvider(provider);
   };
 
   return !signer ? (

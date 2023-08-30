@@ -19,26 +19,23 @@ import { env } from "~/env.mjs";
 export type EthProvider = Awaited<ReturnType<typeof getEthWindowProvider>>;
 
 // need to update to ether v6
-export const getEthWindowProvider = async () => {
+export const getEthWindowProvider = () => {
+  let provider = undefined;
+  let signer = undefined;
   try {
-    let provider;
-    let signer;
-    if (window.ethereum) {
+    if (typeof window.ethereum !== undefined) {
       provider = new ethers.providers.Web3Provider(window.ethereum);
-      // console.log({ provider, signer });
-      await provider.send("eth_requestAccounts", []);
-
+      // provider = new Web3(window.ethereum);
       signer = provider.getSigner();
       // } else {
       //   provider = new ethers.BrowserProvider(window.ethereum);
-      //   signer = await provider.getSigner();
       //   console.log({ provider, signer });
       //   if (!provider) throw new Error("something went wrong");
     }
     return { provider, signer };
   } catch (error) {
     console.error(error);
-    return { provider: null, signer: null };
+    return { provider, signer };
   }
 };
 
@@ -70,13 +67,15 @@ const ComposeApolloClient = async ({
   signer,
 }: Awaited<EthProvider>) => {
   try {
-    if (!signer) throw Error("user did not authenticate");
+    if (!signer || !provider) throw new Error("user did not authenticate");
     // Prompt injected provider (metamask or another client wallet with injected provider) for connection to Nabu
-    const [address] = await signer.getAddress();
-    if (!address) throw Error("no signer address found");
+    const address = await signer.getAddress();
+    if (!address) throw new Error("no signer address found");
+    console.log({ provider, signer });
 
     // Ceramic authentation pipeline
-    const accountId = await getAccountId(provider, address);
+    const accountId = await getAccountId(window.ethereum, address);
+    console.log({ accountId });
     const authMethod = await EthereumWebAuth.getAuthMethod(provider, accountId);
 
     // composedb client with runtime defenitions
