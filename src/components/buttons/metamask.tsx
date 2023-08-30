@@ -1,6 +1,6 @@
 "use client";
 
-import { type MouseEventHandler } from "react";
+import React, { type MouseEventHandler } from "react";
 
 const MetamaskButton = (props: {
   handleClick: MouseEventHandler<HTMLButtonElement>;

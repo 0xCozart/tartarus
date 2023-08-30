@@ -1,11 +1,13 @@
+import Link from "next/link";
 import {
+  useState,
   type Dispatch,
   type MouseEventHandler,
   type SetStateAction,
 } from "react";
 import { getEthWindowProvider, type EthProvider } from "~/api/composedb/client";
 import { MetamaskButton } from "~/components/buttons";
-import Terminal from "~/components/terminal";
+import SignUpTerminal from "~/components/terminals/SignUpTerminal";
 
 type LoginProps = {
   ethProvider: EthProvider;
@@ -14,6 +16,7 @@ type LoginProps = {
 
 const Login = ({ ethProvider, setEthProvider }: LoginProps) => {
   const { provider, signer } = ethProvider;
+  const [hasAccount, setHasAccount] = useState(false);
   const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
 
@@ -21,8 +24,10 @@ const Login = ({ ethProvider, setEthProvider }: LoginProps) => {
     setEthProvider(provider);
   };
 
-  return !signer ? (
-    <div className="content-center">
+  if (hasAccount) return <Link href={"/"} />;
+
+  return !signer && hasAccount ? (
+    <div className="flex h-screen items-center justify-center ">
       <div className="max-w-sm rounded-lg border border-gray-200 bg-white p-6 shadow dark:border-gray-700 dark:bg-gray-800">
         <a href="#">
           <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -37,7 +42,7 @@ const Login = ({ ethProvider, setEthProvider }: LoginProps) => {
       </div>
     </div>
   ) : (
-    <Terminal provider={provider} signer={signer} />
+    <SignUpTerminal provider={provider} signer={signer} />
   );
 };
 
