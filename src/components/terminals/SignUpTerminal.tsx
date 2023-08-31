@@ -7,7 +7,7 @@ const commands: Commands = {
     args: {
       nbArgs: 1,
     },
-    run: () => <p></p>,
+    run: (name) => <p>{}</p>,
   },
 };
 
