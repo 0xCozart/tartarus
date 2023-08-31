@@ -12,8 +12,8 @@ import { ComposeClient } from "@composedb/client";
 import { type AuthMethod } from "@didtools/cacao";
 import { DIDSession } from "did-session";
 import { ethers } from "ethers";
-import { definition } from "~/api/composedb/runtime";
 import { env } from "~/env.mjs";
+import { definition } from "./runtime";
 
 //this is so sick xd
 export type EthProvider = Awaited<ReturnType<typeof getEthWindowProvider>>;
