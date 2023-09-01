@@ -1,3 +1,5 @@
+"use client";
+
 // import pkg from "@apollo/client";
 // const { gql } = pkg;
 import {
@@ -9,7 +11,6 @@ import {
 import { EthereumWebAuth, getAccountId } from "@didtools/pkh-ethereum";
 
 import { ComposeClient } from "@composedb/client";
-import { type AuthMethod } from "@didtools/cacao";
 import { DIDSession } from "did-session";
 import { ethers } from "ethers";
 import { env } from "~/env.mjs";
@@ -39,28 +40,6 @@ export const getEthWindowProvider = () => {
   }
 };
 
-// returns a new session or a non-expired local session
-const sessionCheck = async (authMethod: AuthMethod, compose: ComposeClient) => {
-  // Check if user session already in storage
-  const sessionStr = localStorage.getItem("didsession");
-
-  // If session string available, create a new did-session object
-  let session;
-  if (sessionStr) {
-    session = await DIDSession.fromSession(sessionStr);
-  }
-  // If no session available, create a new user session and store in local storage
-  if (!session || (session.hasSession && session.isExpired)) {
-    const newSession = await DIDSession.authorize(authMethod, {
-      resources: compose.resources,
-    });
-    localStorage.setItem("didsession", newSession.serialize());
-    session = newSession;
-  }
-
-  return session;
-};
-
 // provider and signer will be passed up to the apollo client (need to work out how tho)
 const ComposeApolloClient = async ({
   provider,
@@ -84,7 +63,9 @@ const ComposeApolloClient = async ({
       definition,
     });
 
-    const session = await sessionCheck(authMethod, compose);
+    const session = await DIDSession.authorize(authMethod, {
+      resources: compose.resources,
+    });
     compose.setDID(session.did);
 
     // Create custom ApolloLink using ComposeClient instance to execute operations

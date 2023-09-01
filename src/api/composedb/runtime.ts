@@ -1,5 +1,7 @@
+import { type RuntimeCompositeDefinition } from "@composedb/types";
+
 // This is an auto-generated file, do not edit manually
-export const definition = {
+export const definition: RuntimeCompositeDefinition = {
   models: {
     Message: {
       id: "kjzl6hvfrbw6c7m9jvlhtecmwdehyju1d4ia9k2qg6mk61o44sg3i6oaq5wjiu0",

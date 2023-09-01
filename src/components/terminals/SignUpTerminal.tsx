@@ -1,3 +1,5 @@
+"use client";
+
 import Coquille, { type Commands } from "@algolia/coquille";
 import { useMutation } from "@apollo/client";
 import { DISPLAYNAME_MUTATION } from "~/api/apollo/mutations";

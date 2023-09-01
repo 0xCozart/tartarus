@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ApolloProvider,
   type ApolloClient,
