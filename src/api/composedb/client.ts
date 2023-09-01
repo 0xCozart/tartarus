@@ -1,5 +1,3 @@
-"use client";
-
 // import pkg from "@apollo/client";
 // const { gql } = pkg;
 import {
