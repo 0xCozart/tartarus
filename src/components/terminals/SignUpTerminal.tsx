@@ -3,7 +3,7 @@
 // import Coquille, { type Commands } from "@algolia/coquille";
 // import { useMutation } from "@apollo/client";
 // import { DISPLAYNAME_MUTATION } from "~/api/apollo/mutations";
-import Terminal from "terminal-io";
+import Terminal from "react-console-emulator";
 import { type EthProvider } from "~/api/composedb/client";
 
 // const commands: Commands = {
@@ -27,7 +27,7 @@ import { type EthProvider } from "~/api/composedb/client";
 //   },
 // };
 
-const commands = [];
+const commands = {};
 
 const SignUpTerminal = ({ provider, signer }: EthProvider) => {
   console.log({ provider, signer });

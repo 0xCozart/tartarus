@@ -21,6 +21,7 @@
       "~/*": ["./src/*"]
     }
   },
+  "types": ["./global.d.ts"],
   "include": [
     ".eslintrc.cjs",
     "next-env.d.ts",

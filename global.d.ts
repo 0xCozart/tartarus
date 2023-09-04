@@ -2,8 +2,6 @@
 import type ExternalProvider from "ethers";
 import type AbstractProvider from "web3";
 
-declare module "terminal-io";
-
 interface EthereumProvider extends ExternalProvider {
   _state: unkown;
   sendAsync: AbstractProvider["sendAsync"];
