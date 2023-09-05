@@ -9,7 +9,6 @@
     "start": "next start"
   },
   "dependencies": {
-    "@algolia/coquille": "^0.0.29",
     "@apollo/client": "^3.8.1",
     "@composedb/client": "^0.4.4",
     "@didtools/pkh-ethereum": "^0.4.1",

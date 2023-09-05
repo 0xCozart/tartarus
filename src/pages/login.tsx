@@ -9,7 +9,7 @@ import {
 } from "react";
 import { getEthWindowProvider, type EthProvider } from "~/api/composedb/client";
 import { MetamaskButton } from "~/components/buttons";
-import SignUpTerminal from "~/components/terminals/SignUpTerminal";
+import AuthTerminal from "~/components/terminals/AuthTerminal";
 
 type LoginProps = {
   ethProvider: EthProvider;
@@ -44,7 +44,7 @@ const Login = ({ ethProvider, setEthProvider }: LoginProps) => {
       </div>
     </div>
   ) : (
-    <SignUpTerminal provider={provider} signer={signer} />
+    <AuthTerminal provider={provider} signer={signer} />
   );
 };
 

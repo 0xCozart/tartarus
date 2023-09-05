@@ -8,7 +8,6 @@ import {
 import { type AppType } from "next/dist/shared/lib/utils";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-// import "~/../node_modules/terminal-io/build/style.css";
 import ComposeApolloClient, { type EthProvider } from "~/api/composedb/client";
 import Login from "~/pages/login";
 import "~/styles/globals.css";
