@@ -44,6 +44,7 @@ const Login = ({ ethProvider, setEthProvider }: LoginProps) => {
       </div>
     </div>
   ) : (
+    // DELETE THIS AND REFACTOR SO THAT THIS IS JUST AUTH PAGE THEN REDIRECTS TO SIGNUP PAGE IF NO PROFILE FOUND FOR USER DID
     <AuthTerminal provider={provider} signer={signer} />
   );
 };
