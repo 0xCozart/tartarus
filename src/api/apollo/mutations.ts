@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 // Tartarus username mutation
-const DISPLAYNAME_MUTATION = gql`
-  mutation displayname_mutation($displayName: String!) {
+const CREATE_TARTARUSPROFILE = gql`
+  mutation CREATE_TARTARUSPROFILE($displayName: String!) {
     createTartarusProfile(displayName: $displayName) {
       document {
         displayName
@@ -15,4 +15,4 @@ const DISPLAYNAME_MUTATION = gql`
   }
 `;
 
-export { DISPLAYNAME_MUTATION };
+export { CREATE_TARTARUSPROFILE };
