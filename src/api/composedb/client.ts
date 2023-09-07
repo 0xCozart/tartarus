@@ -10,9 +10,9 @@ import { EthereumWebAuth, getAccountId } from "@didtools/pkh-ethereum";
 
 import { ComposeClient } from "@composedb/client";
 import { DIDSession } from "did-session";
-import { ethers } from "ethers";
-import { env } from "~/env.mjs";
 import { definition } from "./runtime";
+import { env } from "~/env.mjs";
+import { ethers } from "ethers";
 
 //this is so sick xd
 export type EthProvider = Awaited<ReturnType<typeof getEthWindowProvider>>;
@@ -53,7 +53,10 @@ const ComposeApolloClient = async ({
     // Ceramic authentation pipeline
     const accountId = await getAccountId(window.ethereum, address);
     console.log({ accountId });
-    const authMethod = await EthereumWebAuth.getAuthMethod(provider, accountId);
+    const authMethod = await EthereumWebAuth.getAuthMethod(
+      window.ethereum,
+      accountId
+    );
 
     // composedb client with runtime defenitions
     const compose = new ComposeClient({
