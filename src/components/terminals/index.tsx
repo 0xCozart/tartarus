@@ -1,3 +1,4 @@
 import AuthTerminal from "./AuthTerminal";
+import ConnectTerminal from "./ConnectTerminal";
 
-export { AuthTerminal };
+export { AuthTerminal, ConnectTerminal };

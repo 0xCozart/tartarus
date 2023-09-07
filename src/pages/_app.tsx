@@ -5,7 +5,7 @@ import {
   type ApolloClient,
   type NormalizedCacheObject,
 } from "@apollo/client";
-import { loadDevMessages, loadErrorMessages } from "@apollo/client/dev";
+import { loadErrorMessages } from "@apollo/client/dev";
 import { type AppType } from "next/dist/shared/lib/utils";
 import Head from "next/head";
 import { useEffect, useState } from "react";
@@ -20,11 +20,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     signer: undefined,
   });
 
-  if (process.env.NODE_ENV) {
-    // Adds messages only in a dev environment
-    loadDevMessages();
-    loadErrorMessages();
-  }
+  // Adds messages only in a dev environment
+  loadErrorMessages();
 
   useEffect(() => {
     if (ethProvider && !client) {
