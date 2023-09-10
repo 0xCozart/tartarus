@@ -1,4 +1,5 @@
 /**
+ * props for their respective styling
 -style / className	Terminal root container.
 -contentStyle/contentClassName = Terminal content container.
 -inputAreaStyle/inputAreaClassName = Input area element (Container for prompt label and input field).
@@ -23,6 +24,10 @@ const inputTextStylePrimary = {
   caretColor: green,
 };
 
+const contentStylePrimary = {
+  color:green
+}
+
 export {
   darkgrey,
   green,
@@ -31,4 +36,5 @@ export {
   lightpink,
   orange,
   stylePrimary,
+  contentStylePrimary,
 };

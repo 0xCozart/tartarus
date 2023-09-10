@@ -1,4 +1,8 @@
-import { inputTextStylePrimary, stylePrimary } from "~/styles/terminalStyles";
+import {
+  contentStylePrimary,
+  inputTextStylePrimary,
+  stylePrimary,
+} from "~/styles/terminalStyles";
 
 import Terminal from "react-console-emulator";
 
@@ -22,6 +26,7 @@ const ConnectTerminal = ({ connectMetamask }: Props) => {
       style={stylePrimary}
       inputTextStyle={inputTextStylePrimary}
       commands={commands}
+      contentStyle={contentStylePrimary}
     />
   );
 };
