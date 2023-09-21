@@ -32,7 +32,16 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   }, [ethProvider, client]);
 
   if (!client)
-    return <Login ethProvider={ethProvider} setEthProvider={setEthProvider} />;
+    return (
+      <>
+        <Head>
+          <title>Tartarus</title>
+          <meta name="description" content="mystikó" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <Login ethProvider={ethProvider} setEthProvider={setEthProvider} />;
+      </>
+    );
 
   if (client)
     return (

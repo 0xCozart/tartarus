@@ -12,11 +12,12 @@ type Props = {
 
 const ConnectTerminal = ({ connectMetamask }: Props) => {
   const commands = {
-    connect: {
+    login: {
       description: "For your own safety use a burner ethereum account",
       usage: "connect to Tartarus",
       fn: () => {
         connectMetamask();
+        return "connecting...";
       },
     },
   };
