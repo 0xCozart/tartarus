@@ -2,7 +2,7 @@
 import type ExternalProvider from "ethers";
 import type AbstractProvider from "web3";
 
-interface EthereumProvider extends ExternalProvider {
+export interface EthereumProvider extends ExternalProvider {
   _state: unkown;
   sendAsync: AbstractProvider["sendAsync"];
 }

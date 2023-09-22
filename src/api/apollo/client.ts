@@ -10,7 +10,7 @@ import { EthereumWebAuth, getAccountId } from "@didtools/pkh-ethereum";
 
 import { ComposeClient } from "@composedb/client";
 import { DIDSession } from "did-session";
-import { definition } from "./runtime";
+import { definition } from "~/api/composedb/runtime";
 import { env } from "~/env.mjs";
 import { ethers } from "ethers";
 
@@ -24,12 +24,7 @@ export const getEthWindowProvider = () => {
   try {
     if (typeof window.ethereum !== undefined) {
       provider = new ethers.providers.Web3Provider(window.ethereum);
-      // provider = new Web3(window.ethereum);
       signer = provider.getSigner();
-      // } else {
-      //   provider = new ethers.BrowserProvider(window.ethereum);
-      //   console.log({ provider, signer });
-      //   if (!provider) throw new Error("something went wrong");
     }
     return { provider, signer };
   } catch (error) {

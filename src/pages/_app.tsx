@@ -9,7 +9,7 @@ import { loadErrorMessages } from "@apollo/client/dev";
 import { type AppType } from "next/dist/shared/lib/utils";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import ComposeApolloClient, { type EthProvider } from "~/api/composedb/client";
+import ComposeApolloClient, { type EthProvider } from "~/api/apollo/client";
 import Login from "~/pages/login";
 import "~/styles/globals.css";
 
@@ -43,7 +43,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       </>
     );
 
-  if (client)
+  if (client) {
     return (
       <ApolloProvider client={client}>
         <Head>
@@ -56,6 +56,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         {/* </Layout> */}
       </ApolloProvider>
     );
+  }
 };
 
 export default MyApp;
