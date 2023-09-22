@@ -9,8 +9,8 @@
     "start": "next start"
   },
   "dependencies": {
-    "@apollo/client": "^3.8.1",
-    "@composedb/client": "^0.4.4",
+    "@apollo/client": "^3.8.4",
+    "@composedb/client": "^0.5.1",
     "@didtools/pkh-ethereum": "^0.4.1",
     "@lit-protocol/lit-node-client": "^2.2.49",
     "@t3-oss/env-nextjs": "^0.3.1",

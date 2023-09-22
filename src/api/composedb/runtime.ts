@@ -1,10 +1,10 @@
-import { type RuntimeCompositeDefinition } from "@composedb/types";
+import { type RuntimeCompositeDefinition } from "@composedb/types/dist";
 
 // This is an auto-generated file, do not edit manually
 export const definition: RuntimeCompositeDefinition = {
   models: {
     Message: {
-      id: "kjzl6hvfrbw6c7m9jvlhtecmwdehyju1d4ia9k2qg6mk61o44sg3i6oaq5wjiu0",
+      id: "kjzl6hvfrbw6c6urd73ailahq0t1uxipfi8rjz3gpfpcbsc90lyomtff0qtp4fd",
       accountRelation: { type: "list" },
     },
     Room: {
@@ -18,10 +18,10 @@ export const definition: RuntimeCompositeDefinition = {
   },
   objects: {
     Message: {
-      sender: { type: "string", required: true },
+      sender: { type: "did", required: true, indexed: true },
       message: { type: "string", required: false },
-      recipient: { type: "string", required: true },
-      dateTimeCreated: { type: "datetime", required: true },
+      createdAt: { type: "datetime", required: true, indexed: true },
+      recipient: { type: "string", required: true, indexed: true },
     },
     Room: {
       key: { type: "string", required: true },
@@ -29,11 +29,13 @@ export const definition: RuntimeCompositeDefinition = {
         type: "list",
         required: false,
         item: { type: "string", required: false },
+        indexed: true,
       },
       messages: {
         type: "list",
         required: false,
         item: { type: "string", required: false },
+        indexed: true,
       },
       roomName: { type: "string", required: true },
     },
@@ -42,16 +44,19 @@ export const definition: RuntimeCompositeDefinition = {
         type: "list",
         required: false,
         item: { type: "string", required: false },
+        indexed: true,
       },
       rooms: {
         type: "list",
         required: false,
         item: { type: "string", required: false },
+        indexed: true,
       },
       friends: {
         type: "list",
         required: false,
         item: { type: "string", required: false },
+        indexed: true,
       },
       displayName: { type: "string", required: true },
     },

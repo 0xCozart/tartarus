@@ -43,7 +43,7 @@ const Login = ({ ethProvider, setEthProvider }: LoginProps) => {
   // </div>
   return (
     <div>
-      <ConnectTerminal connectMetamask={connectMetamask} ethProvider={ethProvider} />
+      <ConnectTerminal connectMetamask={connectMetamask} />
     </div>
   );
   // ) : // DELETE THIS AND REFACTOR SO THAT THIS IS JUST AUTH PAGE THEN REDIRECTS TO SIGNUP PAGE IF NO PROFILE FOUND FOR USER DID
