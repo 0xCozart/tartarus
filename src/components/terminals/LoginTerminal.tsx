@@ -10,7 +10,7 @@ type Props = {
   connectMetamask: () => void;
 };
 
-const ConnectTerminal = ({ connectMetamask }: Props) => {
+const LoginTerminal = ({ connectMetamask }: Props) => {
   const commands = {
     login: {
       description: "For your own safety use a burner ethereum account",
@@ -32,4 +32,4 @@ const ConnectTerminal = ({ connectMetamask }: Props) => {
   );
 };
 
-export default ConnectTerminal;
+export default LoginTerminal;
