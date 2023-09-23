@@ -16,7 +16,7 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_CERAMIC_URL: z.string().nonempty(),
+    NEXT_PUBLIC_COMPOSEDB_URL: z.string().nonempty(),
     NEXT_PUBLIC_LAVA_GATEWAY: z.string().nonempty(),
   },
 
@@ -26,7 +26,7 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
-    NEXT_PUBLIC_CERAMIC_URL: process.env.NEXT_PUBLIC_CERAMIC_URL,
+    NEXT_PUBLIC_COMPOSEDB_URL: process.env.NEXT_PUBLIC_COMPOSEDB_URL,
     NEXT_PUBLIC_LAVA_GATEWAY: process.env.NEXT_PUBLIC_LAVA_GATEWAY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },

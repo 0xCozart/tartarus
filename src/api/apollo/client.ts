@@ -55,7 +55,7 @@ const ComposeApolloClient = async ({
 
     // composedb client with runtime defenitions
     const compose = new ComposeClient({
-      ceramic: env.NEXT_PUBLIC_CERAMIC_URL || "http://localhost:7007",
+      ceramic: env.NEXT_PUBLIC_COMPOSEDB_URL || "http://localhost:7007",
       definition,
     });
 

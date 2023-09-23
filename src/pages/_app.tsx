@@ -2,6 +2,7 @@
 
 import {
   ApolloProvider,
+  useLazyQuery,
   type ApolloClient,
   type NormalizedCacheObject,
 } from "@apollo/client";
@@ -10,6 +11,7 @@ import { type AppType } from "next/dist/shared/lib/utils";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import ComposeApolloClient, { type EthProvider } from "~/api/apollo/client";
+import { GET_TARTARUS_PROFILE } from "~/api/apollo/querys";
 import Login from "~/pages/login";
 import "~/styles/globals.css";
 
@@ -19,6 +21,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     provider: undefined,
     signer: undefined,
   });
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const [getProfile, { loading, error, data }] =
+    useLazyQuery(GET_TARTARUS_PROFILE);
 
   // Adds messages only in a dev environment
   loadErrorMessages();
@@ -29,7 +34,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         .then((authedClient) => setClient(authedClient))
         .catch(console.error);
     }
-  }, [ethProvider, client]);
+    void getProfile();
+    console.log(data);
+  }, [ethProvider, client, getProfile, data]);
 
   if (!client)
     return (
@@ -39,7 +46,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           <meta name="description" content="mystikó" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <Login ethProvider={ethProvider} setEthProvider={setEthProvider} />;
+        <Login setEthProvider={setEthProvider} />;
       </>
     );
 
