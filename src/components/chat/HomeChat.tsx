@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
 
 function HomeChat() {
   return (
@@ -39,6 +38,8 @@ function HomeChat() {
             <div className="flex flex-row items-center justify-center border-b-2 px-2 py-4">
               <div className="w-1/4">
                 <Image
+                  width={20}
+                  height={20}
                   src="https://source.unsplash.com/_7LbC5J-jw4/600x600"
                   className="h-12 w-12 rounded-full object-cover"
                   alt=""
@@ -52,6 +53,8 @@ function HomeChat() {
             <div className="flex flex-row items-center border-b-2 px-2 py-4">
               <div className="w-1/4">
                 <Image
+                  width={20}
+                  height={20}
                   src="https://source.unsplash.com/otT2199XwI8/600x600"
                   className="h-12 w-12 rounded-full object-cover"
                   alt=""
@@ -65,6 +68,8 @@ function HomeChat() {
             <div className="flex flex-row items-center border-b-2 border-l-4 border-blue-400 px-2 py-4">
               <div className="w-1/4">
                 <Image
+                  width={20}
+                  height={20}
                   src="https://source.unsplash.com/L2cxSuKWbpo/600x600"
                   className="h-12 w-12 rounded-full object-cover"
                   alt=""
@@ -78,6 +83,8 @@ function HomeChat() {
             <div className="flex flex-row items-center border-b-2 px-2 py-4">
               <div className="w-1/4">
                 <Image
+                  width={20}
+                  height={20}
                   src="https://source.unsplash.com/vpOeXr5wmR4/600x600"
                   className="h-12 w-12 rounded-full object-cover"
                   alt=""
@@ -95,6 +102,8 @@ function HomeChat() {
             <div className="flex flex-row items-center border-b-2 px-2 py-4">
               <div className="w-1/4">
                 <Image
+                  width={20}
+                  height={20}
                   src="https://source.unsplash.com/vpOeXr5wmR4/600x600"
                   className="h-12 w-12 rounded-full object-cover"
                   alt=""
@@ -112,6 +121,8 @@ function HomeChat() {
             <div className="flex flex-row items-center border-b-2 px-2 py-4">
               <div className="w-1/4">
                 <Image
+                  width={20}
+                  height={20}
                   src="https://source.unsplash.com/vpOeXr5wmR4/600x600"
                   className="h-12 w-12 rounded-full object-cover"
                   alt=""
@@ -136,6 +147,8 @@ function HomeChat() {
                   Welcome to group everyone !
                 </div>
                 <Image
+                  width={20}
+                  height={20}
                   src="https://source.unsplash.com/vpOeXr5wmR4/600x600"
                   className="h-8 w-8 rounded-full object-cover"
                   alt=""
@@ -143,6 +156,8 @@ function HomeChat() {
               </div>
               <div className="mb-4 flex justify-start">
                 <Image
+                  width={20}
+                  height={20}
                   src="https://source.unsplash.com/vpOeXr5wmR4/600x600"
                   className="h-8 w-8 rounded-full object-cover"
                   alt=""
@@ -167,6 +182,8 @@ function HomeChat() {
                   </div>
                 </div>
                 <Image
+                  width={20}
+                  height={20}
                   src="https://source.unsplash.com/vpOeXr5wmR4/600x600"
                   className="h-8 w-8 rounded-full object-cover"
                   alt=""
@@ -174,6 +191,8 @@ function HomeChat() {
               </div>
               <div className="mb-4 flex justify-start">
                 <Image
+                  width={20}
+                  height={20}
                   src="https://source.unsplash.com/vpOeXr5wmR4/600x600"
                   className="h-8 w-8 rounded-full object-cover"
                   alt=""
@@ -196,6 +215,8 @@ function HomeChat() {
             <div className="flex flex-col">
               <div className="py-4 text-xl font-semibold">Mern Stack Group</div>
               <Image
+                width={20}
+                height={20}
                 src="https://source.unsplash.com/L2cxSuKWbpo/600x600"
                 className="h-64 rounded-xl object-cover"
                 alt=""

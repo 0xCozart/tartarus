@@ -1,4 +1,5 @@
 import { GET_TARTARUS_PROFILE } from "~/api/apollo/querys";
+import HomeChat from "~/components/chat/HomeChat";
 import { SignUpTerminal } from "~/components/terminals";
 import { useEffect } from "react";
 import { useLazyQuery } from "@apollo/client";
@@ -12,12 +13,12 @@ export default function Home({}) {
     console.log({ data });
   }, [getProfile, data]);
 
-  // if (data?.viewer?.tartarusProfile?.displayName)
-  //   return (
-  //     <>
-  //       <HomeChat />
-  //     </>
-  //   );
+  if (data?.viewer?.tartarusProfile?.displayName)
+    return (
+      <>
+        <HomeChat />
+      </>
+    );
 
   return (
     <>

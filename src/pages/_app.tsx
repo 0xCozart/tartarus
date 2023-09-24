@@ -9,6 +9,7 @@ import { loadErrorMessages } from "@apollo/client/dev";
 import { type AppType } from "next/dist/shared/lib/utils";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import secureLocalStorage from "react-secure-storage";
 import ComposeApolloClient, { type EthProvider } from "~/api/apollo/client";
 import Login from "~/pages/login";
 import "~/styles/globals.css";
@@ -19,18 +20,25 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     provider: undefined,
     signer: undefined,
   });
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
+  const sessionDid = secureLocalStorage.getItem("sessionDid") as string;
 
   // Adds messages only in a dev environment
   loadErrorMessages();
 
   useEffect(() => {
     if (ethProvider && !client) {
-      ComposeApolloClient(ethProvider)
-        .then((authedClient) => setClient(authedClient))
+      ComposeApolloClient(ethProvider, sessionDid)
+        .then((res) => {
+          console.log({ res });
+          if (res?.sessionString) {
+            secureLocalStorage.setItem("sessionDid", res.sessionString);
+            setClient(res.client);
+          }
+        })
         .catch(console.error);
     }
-  }, [ethProvider, client]);
+  }, [ethProvider, client, sessionDid]);
 
   if (!client)
     return (
@@ -45,6 +53,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     );
 
   if (client) {
+    console.log({ ethProvider, client });
     return (
       <ApolloProvider client={client}>
         <Head>
