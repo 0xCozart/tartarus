@@ -34,10 +34,10 @@ export const getEthWindowProvider = () => {
 };
 
 // provider and signer will be passed up to the apollo client (need to work out how tho)
-const ComposeApolloClient = async ({
-  provider,
-  signer,
-}: Awaited<EthProvider>) => {
+const ComposeApolloClient = async (
+  { provider, signer }: EthProvider,
+  sessionDid: string | null
+) => {
   try {
     if (!signer || !provider) throw new Error("user did not authenticate");
     // Prompt injected provider (metamask or another client wallet with injected provider) for connection to Nabu
@@ -59,10 +59,28 @@ const ComposeApolloClient = async ({
       definition,
     });
 
-    const session = await DIDSession.authorize(authMethod, {
-      resources: compose.resources,
-    });
-    compose.setDID(session.did);
+    let newSession;
+    let sessionString;
+    if (sessionDid) {
+      const serializedSession = await DIDSession.fromSession(sessionDid);
+      if (!serializedSession.isExpired) {
+        compose.setDID(serializedSession.did);
+        sessionString = sessionDid;
+      } else {
+        newSession = await DIDSession.authorize(authMethod, {
+          resources: compose.resources,
+        });
+        compose.setDID(newSession.did);
+        sessionString = newSession.serialize();
+      }
+    } else {
+      newSession = await DIDSession.authorize(authMethod, {
+        resources: compose.resources,
+      });
+      compose.setDID(newSession.did);
+      sessionString = newSession.serialize();
+      console.log({ sessionString });
+    }
 
     // Create custom ApolloLink using ComposeClient instance to execute operations
     const link = new ApolloLink((operation) => {
@@ -79,11 +97,14 @@ const ComposeApolloClient = async ({
       });
     });
 
-    return new ApolloClient({
-      cache: new InMemoryCache(),
-      link,
-      connectToDevTools: true,
-    });
+    return {
+      client: new ApolloClient({
+        cache: new InMemoryCache(),
+        link,
+        connectToDevTools: true,
+      }),
+      sessionString,
+    };
   } catch (error) {
     console.error("compose/apollo auth error: ", error);
   }
