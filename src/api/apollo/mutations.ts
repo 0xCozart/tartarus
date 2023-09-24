@@ -1,9 +1,9 @@
-import { gql } from "@apollo/client";
+import { gql } from "~/__generated__/gql";
 
 // Tartarus username mutation
-const CREATE_TARTARUSPROFILE = gql`
-  mutation CREATE_TARTARUSPROFILE($displayName: String!) {
-    createTartarusProfile(displayName: $displayName) {
+const CREATE_TARTARUSPROFILE = gql(`
+  mutation CREATE_TARTARUSPROFILE($i: CreateTartarusProfileInput!) {
+    createTartarusProfile(input: $i) {
       document {
         displayName
         friends
@@ -13,6 +13,6 @@ const CREATE_TARTARUSPROFILE = gql`
       }
     }
   }
-`;
+`);
 
 export { CREATE_TARTARUSPROFILE };

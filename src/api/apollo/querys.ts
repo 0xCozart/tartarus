@@ -1,7 +1,7 @@
-import { gql } from "@apollo/client";
+import { gql } from "~/__generated__/gql";
 
-const GET_TARTARUS_PROFILE = gql`
-  query MyQuery {
+const GET_TARTARUS_PROFILE = gql(`
+  query TartarusProfileQuery {
     viewer {
       tartarusProfile {
         displayName
@@ -12,6 +12,6 @@ const GET_TARTARUS_PROFILE = gql`
       }
     }
   }
-`;
+`);
 
 export { GET_TARTARUS_PROFILE };

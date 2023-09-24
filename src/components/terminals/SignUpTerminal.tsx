@@ -1,17 +1,9 @@
-"use client";
-
-import { useMutation } from "@apollo/client";
-import { useState } from "react";
-import Terminal from "react-console-emulator";
-import { type EthProvider } from "~/api/apollo/client";
 import { CREATE_TARTARUSPROFILE } from "~/api/apollo/mutations";
+import Terminal from "react-console-emulator";
+import { useMutation } from "@apollo/client";
 
-const SignUpTerminal = ({ provider, signer }: EthProvider) => {
-  const [disable, setDisable] = useState(false);
-  const [displayName, setDisplayName] = useState<string>();
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const [createProfile, { data, loading, error }] = useMutation(
+const SignUpTerminal = () => {
+  const [createProfile, { data: tartarusData }] = useMutation(
     CREATE_TARTARUSPROFILE
   );
 
@@ -20,8 +12,9 @@ const SignUpTerminal = ({ provider, signer }: EthProvider) => {
       description: "signup to Tartarus",
       usage: "signup <username>",
       fn: (username: string) => {
-        void createProfile({ variables: { displayName: username } });
-        return `${data}}`;
+        void createProfile({
+          variables: { i: { content: { displayName: username } } },
+        });
       },
     },
   };
@@ -29,7 +22,6 @@ const SignUpTerminal = ({ provider, signer }: EthProvider) => {
   return (
     <Terminal
       autoFocus={true}
-      disabled={disable}
       disableOnProcess={true}
       errorText={"invalid command or input try again..."}
       noEchoBack={true}
