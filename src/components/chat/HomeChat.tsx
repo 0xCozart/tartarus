@@ -1,10 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import React from "react";
 
 function HomeChat() {
   return (
     <div>
-      {/* component */} {/* This is an example component */}
       <div className="container mx-auto rounded-lg shadow-lg">
         {/* headaer */}
         <div className="flex items-center justify-between border-b-2 bg-white px-5 py-5">
