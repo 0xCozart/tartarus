@@ -17,7 +17,9 @@ import { ethers } from "ethers";
 //this is so sick xd
 export type EthProvider = Awaited<ReturnType<typeof getEthWindowProvider>>;
 
-// need to update to ether v6
+/**
+ * @returns Ethers Provider and Signer object
+ */
 export const getEthWindowProvider = () => {
   let provider = undefined;
   let signer = undefined;
@@ -33,7 +35,12 @@ export const getEthWindowProvider = () => {
   }
 };
 
-// provider and signer will be passed up to the apollo client (need to work out how tho)
+/**
+ *
+ * @param EthersProviderObject - provider with signer
+ * @param sessionDid - string
+ * @returns Apollo Client configured with ComposeDB and a did session string
+ */
 const ComposeApolloClient = async (
   { provider, signer }: EthProvider,
   sessionDid: string | null
@@ -79,7 +86,6 @@ const ComposeApolloClient = async (
       });
       compose.setDID(newSession.did);
       sessionString = newSession.serialize();
-      console.log({ sessionString });
     }
 
     // Create custom ApolloLink using ComposeClient instance to execute operations

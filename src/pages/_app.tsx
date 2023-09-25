@@ -30,7 +30,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     if (ethProvider && !client) {
       ComposeApolloClient(ethProvider, sessionDid)
         .then((res) => {
-          console.log({ res });
           if (res?.sessionString) {
             secureLocalStorage.setItem("sessionDid", res.sessionString);
             setClient(res.client);
@@ -53,7 +52,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     );
 
   if (client) {
-    console.log({ ethProvider, client });
     return (
       <ApolloProvider client={client}>
         <Head>

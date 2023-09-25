@@ -1,10 +1,11 @@
+import { useLazyQuery } from "@apollo/client";
+import { useEffect } from "react";
+import { type EthProvider } from "~/api/apollo/client";
 import { GET_TARTARUS_PROFILE } from "~/api/apollo/querys";
 import HomeChat from "~/components/chat/HomeChat";
 import { SignUpTerminal } from "~/components/terminals";
-import { useEffect } from "react";
-import { useLazyQuery } from "@apollo/client";
 
-export default function Home({}) {
+export default function Home(ethProvider: EthProvider) {
   const [getProfile, { loading, error, data }] =
     useLazyQuery(GET_TARTARUS_PROFILE);
 
@@ -13,12 +14,14 @@ export default function Home({}) {
     console.log({ data });
   }, [getProfile, data]);
 
-  if (data?.viewer?.tartarusProfile?.displayName)
+  if (data?.viewer?.tartarusProfile?.displayName) {
+    console.log("home page", { ethProvider });
     return (
       <>
-        <HomeChat />
+        <HomeChat provider={ethProvider.provider} signer={ethProvider.signer} />
       </>
     );
+  }
 
   return (
     <>
