@@ -13,6 +13,22 @@ type Query {
 
   """Account currently authenticated on the Ceramic instance, if set"""
   viewer: CeramicAccount
+  roomIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: RoomFiltersInput
+    sorting: RoomSortingInput
+  ): RoomConnection
+  roomCount(filters: RoomFiltersInput): Int!
   messageIndex(
     """Returns the items in the list that come after the specified cursor."""
     after: String
@@ -29,20 +45,6 @@ type Query {
     sorting: MessageSortingInput
   ): MessageConnection
   messageCount(filters: MessageFiltersInput): Int!
-  roomIndex(
-    """Returns the items in the list that come after the specified cursor."""
-    after: String
-
-    """Returns the first n items from the list."""
-    first: Int
-
-    """Returns the items in the list that come before the specified cursor."""
-    before: String
-
-    """Returns the last n items from the list."""
-    last: Int
-  ): RoomConnection
-  roomCount: Int!
   tartarusProfileIndex(
     """Returns the items in the list that come after the specified cursor."""
     after: String
@@ -55,8 +57,10 @@ type Query {
 
     """Returns the last n items from the list."""
     last: Int
+    filters: TartarusProfileFiltersInput
+    sorting: TartarusProfileSortingInput
   ): TartarusProfileConnection
-  tartarusProfileCount: Int!
+  tartarusProfileCount(filters: TartarusProfileFiltersInput): Int!
 }
 
 """An object with an ID"""
@@ -73,6 +77,22 @@ type CeramicAccount implements Node {
   Whether the Ceramic instance is currently authenticated with this account or not
   """
   isViewer: Boolean!
+  roomList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: RoomFiltersInput
+    sorting: RoomSortingInput
+  ): RoomConnection
+  roomListCount(filters: RoomFiltersInput): Int!
   messageList(
     """Returns the items in the list that come after the specified cursor."""
     after: String
@@ -89,30 +109,16 @@ type CeramicAccount implements Node {
     sorting: MessageSortingInput
   ): MessageConnection
   messageListCount(filters: MessageFiltersInput): Int!
-  roomList(
-    """Returns the items in the list that come after the specified cursor."""
-    after: String
-
-    """Returns the first n items from the list."""
-    first: Int
-
-    """Returns the items in the list that come before the specified cursor."""
-    before: String
-
-    """Returns the last n items from the list."""
-    last: Int
-  ): RoomConnection
-  roomListCount: Int!
   tartarusProfile: TartarusProfile
 }
 
 """A connection to a list of items."""
-type MessageConnection {
+type RoomConnection {
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
   """A list of edges."""
-  edges: [MessageEdge]
+  edges: [RoomEdge]
 }
 
 """Information about pagination in a connection."""
@@ -131,6 +137,59 @@ type PageInfo {
 }
 
 """An edge in a connection."""
+type RoomEdge {
+  """The item at the end of the edge"""
+  node: Room
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type Room implements Node {
+  id: ID!
+  key: String!
+  members: [CeramicAccount]
+  roomName: String!
+  createdAt: DateTime!
+  tartarusProfileId: CeramicStreamID!
+  messages(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+
+    """Returns only documents created by the provided account"""
+    account: ID
+    filters: MessageFiltersInput
+    sorting: MessageSortingInput
+  ): MessageConnection!
+}
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
+"""A Ceramic Stream ID"""
+scalar CeramicStreamID @specifiedBy(url: "https://github.com/ceramicnetwork/CIP/blob/main/CIPs/CIP-59/CIP-59.md#streamid")
+
+"""A connection to a list of items."""
+type MessageConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [MessageEdge]
+}
+
+"""An edge in a connection."""
 type MessageEdge {
   """The item at the end of the edge"""
   node: Message
@@ -141,16 +200,12 @@ type MessageEdge {
 
 type Message implements Node {
   id: ID!
+  roomId: CeramicStreamID!
   sender: CeramicAccount!
   message: String
   createdAt: DateTime!
-  recipient: String!
+  room: Room
 }
-
-"""
-A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
-"""
-scalar DateTime
 
 input MessageFiltersInput {
   where: MessageObjectFilterInput
@@ -161,8 +216,8 @@ input MessageFiltersInput {
 
 input MessageObjectFilterInput {
   sender: StringValueFilterInput
+  message: StringValueFilterInput
   createdAt: StringValueFilterInput
-  recipient: StringValueFilterInput
 }
 
 input StringValueFilterInput {
@@ -179,8 +234,8 @@ input StringValueFilterInput {
 
 input MessageSortingInput {
   sender: SortOrder
+  message: SortOrder
   createdAt: SortOrder
-  recipient: SortOrder
 }
 
 enum SortOrder {
@@ -188,38 +243,47 @@ enum SortOrder {
   DESC
 }
 
-"""A connection to a list of items."""
-type RoomConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """A list of edges."""
-  edges: [RoomEdge]
+input RoomFiltersInput {
+  where: RoomObjectFilterInput
+  and: [RoomFiltersInput!]
+  or: [RoomFiltersInput!]
+  not: RoomFiltersInput
 }
 
-"""An edge in a connection."""
-type RoomEdge {
-  """The item at the end of the edge"""
-  node: Room
-
-  """A cursor for use in pagination"""
-  cursor: String!
+input RoomObjectFilterInput {
+  roomName: StringValueFilterInput
+  createdAt: StringValueFilterInput
 }
 
-type Room implements Node {
-  id: ID!
-  key: String!
-  members: [String]
-  messages: [String]
-  roomName: String!
+input RoomSortingInput {
+  roomName: SortOrder
+  createdAt: SortOrder
 }
 
 type TartarusProfile implements Node {
   id: ID!
-  chats: [String]
-  rooms: [String]
-  friends: [String]
+  friends: [CeramicAccount]
+  createdAt: DateTime!
   displayName: String!
+  profilePicture: String!
+  rooms(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+
+    """Returns only documents created by the provided account"""
+    account: ID
+    filters: RoomFiltersInput
+    sorting: RoomSortingInput
+  ): RoomConnection!
 }
 
 """A connection to a list of items."""
@@ -240,84 +304,29 @@ type TartarusProfileEdge {
   cursor: String!
 }
 
+input TartarusProfileFiltersInput {
+  where: TartarusProfileObjectFilterInput
+  and: [TartarusProfileFiltersInput!]
+  or: [TartarusProfileFiltersInput!]
+  not: TartarusProfileFiltersInput
+}
+
+input TartarusProfileObjectFilterInput {
+  createdAt: StringValueFilterInput
+}
+
+input TartarusProfileSortingInput {
+  createdAt: SortOrder
+}
+
 type Mutation {
-  createMessage(input: CreateMessageInput!): CreateMessagePayload
-  updateMessage(input: UpdateMessageInput!): UpdateMessagePayload
   createRoom(input: CreateRoomInput!): CreateRoomPayload
   updateRoom(input: UpdateRoomInput!): UpdateRoomPayload
+  createMessage(input: CreateMessageInput!): CreateMessagePayload
+  updateMessage(input: UpdateMessageInput!): UpdateMessagePayload
   createTartarusProfile(input: CreateTartarusProfileInput!): CreateTartarusProfilePayload
   updateTartarusProfile(input: UpdateTartarusProfileInput!): UpdateTartarusProfilePayload
 }
-
-type CreateMessagePayload {
-  """Fetches an object given its ID"""
-  node(
-    """The ID of an object"""
-    id: ID!
-  ): Node
-
-  """Account currently authenticated on the Ceramic instance, if set"""
-  viewer: CeramicAccount
-  document: Message!
-  clientMutationId: String
-}
-
-input CreateMessageInput {
-  content: MessageInput!
-  clientMutationId: String
-}
-
-input MessageInput {
-  sender: DID!
-  message: String
-  createdAt: DateTime!
-  recipient: String!
-}
-
-"""
-A field whose value conforms to the standard DID format as specified in did-core: https://www.w3.org/TR/did-core/.
-"""
-scalar DID @specifiedBy(url: "https://www.w3.org/TR/did-core/")
-
-type UpdateMessagePayload {
-  """Fetches an object given its ID"""
-  node(
-    """The ID of an object"""
-    id: ID!
-  ): Node
-
-  """Account currently authenticated on the Ceramic instance, if set"""
-  viewer: CeramicAccount
-  document: Message!
-  clientMutationId: String
-}
-
-input UpdateMessageInput {
-  id: ID!
-  content: PartialMessageInput!
-  options: UpdateOptionsInput
-  clientMutationId: String
-}
-
-input PartialMessageInput {
-  sender: DID
-  message: String
-  createdAt: DateTime
-  recipient: String
-}
-
-input UpdateOptionsInput {
-  """
-  Fully replace the document contents instead of performing a shallow merge
-  """
-  replace: Boolean = false
-
-  """Only perform mutation if the document matches the provided version"""
-  version: CeramicCommitID
-}
-
-"""A Ceramic Commit ID"""
-scalar CeramicCommitID @specifiedBy(url: "https://github.com/ceramicnetwork/CIP/blob/main/CIPs/CIP-59/CIP-59.md#commitid")
 
 type CreateRoomPayload {
   """Fetches an object given its ID"""
@@ -339,10 +348,16 @@ input CreateRoomInput {
 
 input RoomInput {
   key: String!
-  members: [String]
-  messages: [String]
+  members: [DID]
   roomName: String!
+  createdAt: DateTime!
+  tartarusProfileId: CeramicStreamID!
 }
+
+"""
+A field whose value conforms to the standard DID format as specified in did-core: https://www.w3.org/TR/did-core/.
+"""
+scalar DID @specifiedBy(url: "https://www.w3.org/TR/did-core/")
 
 type UpdateRoomPayload {
   """Fetches an object given its ID"""
@@ -366,9 +381,75 @@ input UpdateRoomInput {
 
 input PartialRoomInput {
   key: String
-  members: [String]
-  messages: [String]
+  members: [DID]
   roomName: String
+  createdAt: DateTime
+  tartarusProfileId: CeramicStreamID
+}
+
+input UpdateOptionsInput {
+  """
+  Fully replace the document contents instead of performing a shallow merge
+  """
+  replace: Boolean = false
+
+  """Only perform mutation if the document matches the provided version"""
+  version: CeramicCommitID
+}
+
+"""A Ceramic Commit ID"""
+scalar CeramicCommitID @specifiedBy(url: "https://github.com/ceramicnetwork/CIP/blob/main/CIPs/CIP-59/CIP-59.md#commitid")
+
+type CreateMessagePayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: Message!
+  clientMutationId: String
+}
+
+input CreateMessageInput {
+  content: MessageInput!
+  clientMutationId: String
+}
+
+input MessageInput {
+  roomId: CeramicStreamID!
+  sender: DID!
+  message: String
+  createdAt: DateTime!
+}
+
+type UpdateMessagePayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: Message!
+  clientMutationId: String
+}
+
+input UpdateMessageInput {
+  id: ID!
+  content: PartialMessageInput!
+  options: UpdateOptionsInput
+  clientMutationId: String
+}
+
+input PartialMessageInput {
+  roomId: CeramicStreamID
+  sender: DID
+  message: String
+  createdAt: DateTime
 }
 
 type CreateTartarusProfilePayload {
@@ -390,10 +471,10 @@ input CreateTartarusProfileInput {
 }
 
 input TartarusProfileInput {
-  chats: [String]
-  rooms: [String]
-  friends: [String]
+  friends: [DID]
+  createdAt: DateTime!
   displayName: String!
+  profilePicture: String!
 }
 
 type UpdateTartarusProfilePayload {
@@ -417,8 +498,8 @@ input UpdateTartarusProfileInput {
 }
 
 input PartialTartarusProfileInput {
-  chats: [String]
-  rooms: [String]
-  friends: [String]
+  friends: [DID]
+  createdAt: DateTime
   displayName: String
+  profilePicture: String
 }
