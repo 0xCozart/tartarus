@@ -5,11 +5,21 @@ const CREATE_TARTARUSPROFILE = gql(`
   mutation CREATE_TARTARUSPROFILE($i: CreateTartarusProfileInput!) {
     createTartarusProfile(input: $i) {
       document {
-        displayName
-        friends
         id
-        chats
-        rooms
+        createdAt
+        displayName
+        friends {
+          id
+        }
+        rooms(first: 10) {
+          edges {
+            node {
+              id
+              key
+              createdAt
+            }
+          }
+        }
       }
     }
   }

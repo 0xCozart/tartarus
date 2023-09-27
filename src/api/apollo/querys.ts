@@ -4,11 +4,21 @@ const GET_TARTARUS_PROFILE = gql(`
   query TartarusProfileQuery {
     viewer {
       tartarusProfile {
+        createdAt
         displayName
-        friends
+        friends {
+          id
+        }
         id
-        rooms
-        chats
+        rooms(first: 10) {
+          edges {
+            node {
+              id
+              key
+              createdAt
+            }
+          }
+        }
       }
     }
   }

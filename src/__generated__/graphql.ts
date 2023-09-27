@@ -16,6 +16,8 @@ export type Scalars = {
   Float: { input: number; output: number; }
   /** A Ceramic Commit ID */
   CeramicCommitID: { input: any; output: any; }
+  /** A Ceramic Stream ID */
+  CeramicStreamID: { input: any; output: any; }
   /** A field whose value conforms to the standard DID format as specified in did-core: https://www.w3.org/TR/did-core/. */
   DID: { input: any; output: any; }
   /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
@@ -54,8 +56,15 @@ export type CeramicAccountMessageListCountArgs = {
 export type CeramicAccountRoomListArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<RoomFiltersInput>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<RoomSortingInput>;
+};
+
+
+export type CeramicAccountRoomListCountArgs = {
+  filters?: InputMaybe<RoomFiltersInput>;
 };
 
 export type CreateMessageInput = {
@@ -123,7 +132,8 @@ export type Message = Node & {
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   message?: Maybe<Scalars['String']['output']>;
-  recipient: Scalars['String']['output'];
+  room?: Maybe<Room>;
+  roomId: Scalars['CeramicStreamID']['output'];
   sender: CeramicAccount;
 };
 
@@ -155,19 +165,19 @@ export type MessageFiltersInput = {
 export type MessageInput = {
   createdAt: Scalars['DateTime']['input'];
   message?: InputMaybe<Scalars['String']['input']>;
-  recipient: Scalars['String']['input'];
+  roomId: Scalars['CeramicStreamID']['input'];
   sender: Scalars['DID']['input'];
 };
 
 export type MessageObjectFilterInput = {
   createdAt?: InputMaybe<StringValueFilterInput>;
-  recipient?: InputMaybe<StringValueFilterInput>;
+  message?: InputMaybe<StringValueFilterInput>;
   sender?: InputMaybe<StringValueFilterInput>;
 };
 
 export type MessageSortingInput = {
   createdAt?: InputMaybe<SortOrder>;
-  recipient?: InputMaybe<SortOrder>;
+  message?: InputMaybe<SortOrder>;
   sender?: InputMaybe<SortOrder>;
 };
 
@@ -233,22 +243,23 @@ export type PageInfo = {
 export type PartialMessageInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   message?: InputMaybe<Scalars['String']['input']>;
-  recipient?: InputMaybe<Scalars['String']['input']>;
+  roomId?: InputMaybe<Scalars['CeramicStreamID']['input']>;
   sender?: InputMaybe<Scalars['DID']['input']>;
 };
 
 export type PartialRoomInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   key?: InputMaybe<Scalars['String']['input']>;
-  members?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  messages?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  members?: InputMaybe<Array<InputMaybe<Scalars['DID']['input']>>>;
   roomName?: InputMaybe<Scalars['String']['input']>;
+  tartarusProfileId?: InputMaybe<Scalars['CeramicStreamID']['input']>;
 };
 
 export type PartialTartarusProfileInput = {
-  chats?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   displayName?: InputMaybe<Scalars['String']['input']>;
-  friends?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  rooms?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  friends?: InputMaybe<Array<InputMaybe<Scalars['DID']['input']>>>;
+  profilePicture?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Query = {
@@ -293,28 +304,55 @@ export type QueryNodesArgs = {
 };
 
 
+export type QueryRoomCountArgs = {
+  filters?: InputMaybe<RoomFiltersInput>;
+};
+
+
 export type QueryRoomIndexArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<RoomFiltersInput>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<RoomSortingInput>;
+};
+
+
+export type QueryTartarusProfileCountArgs = {
+  filters?: InputMaybe<TartarusProfileFiltersInput>;
 };
 
 
 export type QueryTartarusProfileIndexArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<TartarusProfileFiltersInput>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<TartarusProfileSortingInput>;
 };
 
 export type Room = Node & {
   __typename?: 'Room';
+  createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   key: Scalars['String']['output'];
-  members?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  messages?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  members?: Maybe<Array<Maybe<CeramicAccount>>>;
+  messages: MessageConnection;
   roomName: Scalars['String']['output'];
+  tartarusProfileId: Scalars['CeramicStreamID']['output'];
+};
+
+
+export type RoomMessagesArgs = {
+  account?: InputMaybe<Scalars['ID']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<MessageFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<MessageSortingInput>;
 };
 
 /** A connection to a list of items. */
@@ -335,11 +373,29 @@ export type RoomEdge = {
   node?: Maybe<Room>;
 };
 
+export type RoomFiltersInput = {
+  and?: InputMaybe<Array<RoomFiltersInput>>;
+  not?: InputMaybe<RoomFiltersInput>;
+  or?: InputMaybe<Array<RoomFiltersInput>>;
+  where?: InputMaybe<RoomObjectFilterInput>;
+};
+
 export type RoomInput = {
+  createdAt: Scalars['DateTime']['input'];
   key: Scalars['String']['input'];
-  members?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  messages?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  members?: InputMaybe<Array<InputMaybe<Scalars['DID']['input']>>>;
   roomName: Scalars['String']['input'];
+  tartarusProfileId: Scalars['CeramicStreamID']['input'];
+};
+
+export type RoomObjectFilterInput = {
+  createdAt?: InputMaybe<StringValueFilterInput>;
+  roomName?: InputMaybe<StringValueFilterInput>;
+};
+
+export type RoomSortingInput = {
+  createdAt?: InputMaybe<SortOrder>;
+  roomName?: InputMaybe<SortOrder>;
 };
 
 export enum SortOrder {
@@ -361,11 +417,23 @@ export type StringValueFilterInput = {
 
 export type TartarusProfile = Node & {
   __typename?: 'TartarusProfile';
-  chats?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  createdAt: Scalars['DateTime']['output'];
   displayName: Scalars['String']['output'];
-  friends?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  friends?: Maybe<Array<Maybe<CeramicAccount>>>;
   id: Scalars['ID']['output'];
-  rooms?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  profilePicture: Scalars['String']['output'];
+  rooms: RoomConnection;
+};
+
+
+export type TartarusProfileRoomsArgs = {
+  account?: InputMaybe<Scalars['ID']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<RoomFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<RoomSortingInput>;
 };
 
 /** A connection to a list of items. */
@@ -386,11 +454,26 @@ export type TartarusProfileEdge = {
   node?: Maybe<TartarusProfile>;
 };
 
+export type TartarusProfileFiltersInput = {
+  and?: InputMaybe<Array<TartarusProfileFiltersInput>>;
+  not?: InputMaybe<TartarusProfileFiltersInput>;
+  or?: InputMaybe<Array<TartarusProfileFiltersInput>>;
+  where?: InputMaybe<TartarusProfileObjectFilterInput>;
+};
+
 export type TartarusProfileInput = {
-  chats?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  createdAt: Scalars['DateTime']['input'];
   displayName: Scalars['String']['input'];
-  friends?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  rooms?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  friends?: InputMaybe<Array<InputMaybe<Scalars['DID']['input']>>>;
+  profilePicture: Scalars['String']['input'];
+};
+
+export type TartarusProfileObjectFilterInput = {
+  createdAt?: InputMaybe<StringValueFilterInput>;
+};
+
+export type TartarusProfileSortingInput = {
+  createdAt?: InputMaybe<SortOrder>;
 };
 
 export type UpdateMessageInput = {
@@ -471,13 +554,13 @@ export type Create_TartarusprofileMutationVariables = Exact<{
 }>;
 
 
-export type Create_TartarusprofileMutation = { __typename?: 'Mutation', createTartarusProfile?: { __typename?: 'CreateTartarusProfilePayload', document: { __typename?: 'TartarusProfile', displayName: string, friends?: Array<string | null> | null, id: string, chats?: Array<string | null> | null, rooms?: Array<string | null> | null } } | null };
+export type Create_TartarusprofileMutation = { __typename?: 'Mutation', createTartarusProfile?: { __typename?: 'CreateTartarusProfilePayload', document: { __typename?: 'TartarusProfile', id: string, createdAt: any, displayName: string, friends?: Array<{ __typename?: 'CeramicAccount', id: string } | null> | null, rooms: { __typename?: 'RoomConnection', edges?: Array<{ __typename?: 'RoomEdge', node?: { __typename?: 'Room', id: string, key: string, createdAt: any } | null } | null> | null } } } | null };
 
 export type TartarusProfileQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TartarusProfileQueryQuery = { __typename?: 'Query', viewer?: { __typename?: 'CeramicAccount', tartarusProfile?: { __typename?: 'TartarusProfile', displayName: string, friends?: Array<string | null> | null, id: string, rooms?: Array<string | null> | null, chats?: Array<string | null> | null } | null } | null };
+export type TartarusProfileQueryQuery = { __typename?: 'Query', viewer?: { __typename?: 'CeramicAccount', tartarusProfile?: { __typename?: 'TartarusProfile', createdAt: any, displayName: string, id: string, friends?: Array<{ __typename?: 'CeramicAccount', id: string } | null> | null, rooms: { __typename?: 'RoomConnection', edges?: Array<{ __typename?: 'RoomEdge', node?: { __typename?: 'Room', id: string, key: string, createdAt: any } | null } | null> | null } } | null } | null };
 
 
-export const Create_TartarusprofileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CREATE_TARTARUSPROFILE"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"i"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateTartarusProfileInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createTartarusProfile"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"i"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"document"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayName"}},{"kind":"Field","name":{"kind":"Name","value":"friends"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"chats"}},{"kind":"Field","name":{"kind":"Name","value":"rooms"}}]}}]}}]}}]} as unknown as DocumentNode<Create_TartarusprofileMutation, Create_TartarusprofileMutationVariables>;
-export const TartarusProfileQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"TartarusProfileQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"viewer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tartarusProfile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayName"}},{"kind":"Field","name":{"kind":"Name","value":"friends"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"rooms"}},{"kind":"Field","name":{"kind":"Name","value":"chats"}}]}}]}}]}}]} as unknown as DocumentNode<TartarusProfileQueryQuery, TartarusProfileQueryQueryVariables>;
+export const Create_TartarusprofileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CREATE_TARTARUSPROFILE"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"i"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateTartarusProfileInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createTartarusProfile"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"i"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"document"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"displayName"}},{"kind":"Field","name":{"kind":"Name","value":"friends"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"rooms"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"10"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<Create_TartarusprofileMutation, Create_TartarusprofileMutationVariables>;
+export const TartarusProfileQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"TartarusProfileQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"viewer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tartarusProfile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"displayName"}},{"kind":"Field","name":{"kind":"Name","value":"friends"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"rooms"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"10"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<TartarusProfileQueryQuery, TartarusProfileQueryQueryVariables>;
