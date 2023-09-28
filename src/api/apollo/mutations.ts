@@ -4,20 +4,31 @@ import { gql } from "~/__generated__/gql";
 const CREATE_TARTARUSPROFILE = gql(`
   mutation CREATE_TARTARUSPROFILE($i: CreateTartarusProfileInput!) {
     createTartarusProfile(input: $i) {
-      document {
+      viewer {
         id
-        createdAt
-        displayName
-        friends {
-          id
-        }
-        rooms(first: 10) {
+        isViewer
+        messageList(first: 10) {
           edges {
             node {
-              id
-              key
               createdAt
+              id
+              message
+              roomId
+              room {
+                id
+                key
+              }
             }
+          }
+        }
+        tartarusProfile {
+          createdAt
+          displayName
+          id
+          profilePicture
+          friends {
+            id
+            isViewer
           }
         }
       }

@@ -13,7 +13,15 @@ const SignUpTerminal = () => {
       usage: "signup <username>",
       fn: (username: string) => {
         void createProfile({
-          variables: { i: { content: { displayName: username } } },
+          variables: {
+            i: {
+              content: {
+                displayName: username,
+                createdAt: new Date().toISOString(),
+                profilePicture: "test URI",
+              },
+            },
+          },
         });
       },
     },
