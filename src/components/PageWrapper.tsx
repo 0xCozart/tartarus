@@ -1,14 +1,38 @@
 import Image from "next/image";
-import React from "react";
+import { type ReactNode } from "react";
 
-type NavbarProps = {
+type PageWrapperProps = {
   displayName: string;
   profilePictureUri: string;
+  children: ReactNode;
 };
 
-const Navbar = ({ displayName, profilePictureUri }: NavbarProps) => {
+const PageWrapper = ({
+  displayName,
+  profilePictureUri,
+  children,
+}: PageWrapperProps) => {
   return (
-    <div>
+    <div className="h-full w-full">
+      {/* Topbar starts */}
+      <header className="relative flex h-16 w-full items-center justify-end space-x-10 bg-gray-800 px-5">
+        <div className="flex flex-shrink-0 items-center space-x-6 text-white">
+          <div className="flex flex-col items-end ">
+            <div className="text-md font-medium ">{displayName}</div>
+            {/* <div className="font-regular text-sm">Student</div> */}
+          </div>
+          <div className="h-10 w-10 cursor-pointer rounded-full border-2 border-blue-400 bg-gray-200">
+            <Image
+              src={profilePictureUri}
+              height={10}
+              width={10}
+              alt={`${displayName}'s profile picture`}
+            />
+          </div>
+        </div>
+      </header>
+      {/* Topbar ends */}
+      {/* Sidebar starts */}
       <aside className="relative flex h-full w-16 flex-col items-center justify-center space-y-10 bg-gray-800 text-white">
         <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg hover:bg-white hover:text-gray-800  hover:duration-300 hover:ease-linear focus:bg-white">
           <svg
@@ -24,7 +48,6 @@ const Navbar = ({ displayName, profilePictureUri }: NavbarProps) => {
             />
           </svg>
         </div>
-
         <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg hover:bg-white hover:text-gray-800  hover:duration-300 hover:ease-linear focus:bg-white">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -58,7 +81,6 @@ const Navbar = ({ displayName, profilePictureUri }: NavbarProps) => {
             />
           </svg>
         </div>
-
         <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg hover:bg-white hover:text-gray-800  hover:duration-300 hover:ease-linear focus:bg-white">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -82,26 +104,12 @@ const Navbar = ({ displayName, profilePictureUri }: NavbarProps) => {
           </svg>
         </div>
       </aside>
+      {/* Sidebar ends */}
       <div className="flex h-full w-full flex-col justify-between">
-        <header className="relative flex h-16 w-full items-center justify-end space-x-10 bg-gray-800 px-5">
-          <div className="flex flex-shrink-0 items-center space-x-4 text-white">
-            <div className="flex flex-col items-end ">
-              <div className="text-md font-medium ">{displayName}</div>
-              {/* <div className="font-regular text-sm">Student</div> */}
-            </div>
-            <div className="h-10 w-10 cursor-pointer rounded-full border-2 border-blue-400 bg-gray-200">
-              <Image
-                src={profilePictureUri}
-                height={10}
-                width={10}
-                alt={`${displayName}'s profile picture`}
-              />
-            </div>
-          </div>
-        </header>
+        {children}
       </div>
     </div>
   );
 };
 
-export default Navbar;
+export default PageWrapper;
