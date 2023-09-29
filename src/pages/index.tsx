@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { type TartarusProfile } from "~/__generated__/graphql";
 import { type EthProvider } from "~/api/apollo/client";
 import { GET_TARTARUS_PROFILE } from "~/api/apollo/querys";
-import Navbar from "~/components/Navbar";
+import PageWrapper from "~/components/PageWrapper";
 import HomeChat from "~/components/chat/HomeChat";
 
 type HomeProps = {
@@ -24,8 +24,12 @@ export default function Home({ ethProvider }: HomeProps) {
     console.log("home page", { ethProvider });
     return (
       <div className="relative flex h-screen w-full overflow-hidden bg-white">
-        <Navbar displayName="" profilePictureUri="" />
-        <HomeChat provider={ethProvider.provider} signer={ethProvider.signer} />
+        <PageWrapper displayName="" profilePictureUri="">
+          <HomeChat
+            provider={ethProvider.provider}
+            signer={ethProvider.signer}
+          />
+        </PageWrapper>
       </div>
     );
   }
