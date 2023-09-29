@@ -53,65 +53,6 @@ function HomeChat(ethProvider: EthProvider) {
                   <span className="text-gray-500">Hi Sam, Welcome</span>
                 </div>
               </div>
-              <div className="flex flex-row items-center border-b-2 px-2 py-4">
-                <div className="w-1/4">
-                  <Image
-                    width={20}
-                    height={20}
-                    src="https://source.unsplash.com/otT2199XwI8/600x600"
-                    className="h-12 w-12 rounded-full object-cover"
-                    alt=""
-                  />
-                </div>
-                <div className="w-full">
-                  <div className="text-lg font-semibold">Everest Trip 2021</div>
-                  <span className="text-gray-500">Hi Sam, Welcome</span>
-                </div>
-              </div>
-              <div className="flex flex-row items-center border-b-2 px-2 py-4">
-                <div className="w-1/4">
-                  <Image
-                    width={20}
-                    height={20}
-                    src="https://source.unsplash.com/otT2199XwI8/600x600"
-                    className="h-12 w-12 rounded-full object-cover"
-                    alt=""
-                  />
-                </div>
-                <div className="w-full">
-                  <div className="text-lg font-semibold">Everest Trip 2021</div>
-                  <span className="text-gray-500">Hi Sam, Welcome</span>
-                </div>
-              </div>
-              <div className="flex flex-row items-center border-b-2 px-2 py-4">
-                <div className="w-1/4">
-                  <Image
-                    width={20}
-                    height={20}
-                    src="https://source.unsplash.com/otT2199XwI8/600x600"
-                    className="h-12 w-12 rounded-full object-cover"
-                    alt=""
-                  />
-                </div>
-                <div className="w-full">
-                  <div className="text-lg font-semibold">Everest Trip 2021</div>
-                  <span className="text-gray-500">Hi Sam, Welcome</span>
-                </div>
-              </div>
-
-              <div className="w-1/4">
-                <Image
-                  width={20}
-                  height={20}
-                  src="https://source.unsplash.com/_7LbC5J-jw4/600x600"
-                  className="h-12 w-12 rounded-full object-cover"
-                  alt=""
-                />
-              </div>
-              <div className="w-full">
-                <div className="text-lg font-semibold">Luis1994</div>
-                <span className="text-gray-500">Pick me at 9:00 Am</span>
-              </div>
             </div>
             <div className="flex flex-row items-center border-b-2 px-2 py-4">
               <div className="w-1/4">

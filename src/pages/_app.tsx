@@ -9,7 +9,6 @@ import { loadErrorMessages } from "@apollo/client/dev";
 import { DIDSession } from "did-session";
 import { type AppType } from "next/dist/shared/lib/utils";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import secureLocalStorage from "react-secure-storage";
 import ComposeApolloClient, {
@@ -21,8 +20,8 @@ import "~/styles/globals.css";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const [client, setClient] = useState<ApolloClient<NormalizedCacheObject>>();
-  const [isAuthed, setIsAuthed] = useState(false);
-  const router = useRouter();
+  // const [isAuthed, setIsAuthed] = useState(false);
+  // const router = useRouter();
   const [ethProvider, setEthProvider] = useState<Awaited<EthProvider>>({
     provider: undefined,
     signer: undefined,
@@ -33,12 +32,10 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   loadErrorMessages();
 
   useEffect(() => {
-    console.log({ client });
     if (sessionDid && !client) {
       DIDSession.fromSession(sessionDid)
         .then((res) => {
           if (!res.isExpired) {
-            console.log({ res, sessionDid });
             const ethProvider = getEthWindowProvider();
             ComposeApolloClient(ethProvider, sessionDid)
               .then((res) => {
@@ -84,11 +81,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         {/* <Layout> */}
-        <Component
-          {...pageProps}
-          ethProvider={ethProvider}
-          isAuthed={isAuthed}
-        />
+        <Component {...pageProps} ethProvider={ethProvider} />
         {/* </Layout> */}
       </ApolloProvider>
     );

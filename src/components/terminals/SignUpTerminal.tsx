@@ -1,26 +1,24 @@
-import { CREATE_TARTARUSPROFILE } from "~/api/apollo/mutations";
+import { type Dispatch, type SetStateAction } from "react";
 import Terminal from "react-console-emulator";
-import { useMutation } from "@apollo/client";
+import { type CreateTartarusProfileInput } from "~/__generated__/graphql";
 
-const SignUpTerminal = () => {
-  const [createProfile, { data: tartarusData }] = useMutation(
-    CREATE_TARTARUSPROFILE
-  );
-
+const SignUpTerminal = ({
+  setMutationData,
+}: {
+  setMutationData: Dispatch<
+    SetStateAction<CreateTartarusProfileInput | undefined>
+  >;
+}) => {
   const commands = {
     signup: {
       description: "signup to Tartarus",
       usage: "signup <username>",
       fn: (username: string) => {
-        void createProfile({
-          variables: {
-            i: {
-              content: {
-                displayName: username,
-                createdAt: new Date().toISOString(),
-                profilePicture: "test URI",
-              },
-            },
+        setMutationData({
+          content: {
+            displayName: username,
+            createdAt: new Date().toISOString(),
+            profilePicture: "test URI",
           },
         });
       },

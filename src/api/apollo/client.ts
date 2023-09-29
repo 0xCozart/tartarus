@@ -50,11 +50,9 @@ const ComposeApolloClient = async (
     // Prompt injected provider (metamask or another client wallet with injected provider) for connection to Nabu
     const address = await signer.getAddress();
     if (!address) throw new Error("no signer address found");
-    console.log({ provider, signer });
 
     // Ceramic authentation pipeline
     const accountId = await getAccountId(window.ethereum, address);
-    console.log({ accountId });
     const authMethod = await EthereumWebAuth.getAuthMethod(
       window.ethereum,
       accountId
