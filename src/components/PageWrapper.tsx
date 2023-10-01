@@ -16,18 +16,11 @@ const PageWrapper = ({
     <div className="h-full w-full">
       {/* Topbar starts */}
       <header className="relative flex h-16 w-full items-center justify-end space-x-10 bg-gray-800 px-5">
-        <div className="flex flex-shrink-0 items-center space-x-6 text-white">
-          <div className="flex flex-col items-end ">
-            <div className="text-md font-medium ">{displayName}</div>
-            {/* <div className="font-regular text-sm">Student</div> */}
-          </div>
+        <div className="flex flex-shrink-0 items-center space-x-2 text-white">
+          <div className="text-md font-medium ">{displayName}</div>
+          {/* <div className="font-regular text-sm">Student</div> */}
           <div className="h-10 w-10 cursor-pointer rounded-full border-2 border-blue-400 bg-gray-200">
-            <Image
-              src={profilePictureUri}
-              height={10}
-              width={10}
-              alt={`${displayName}'s profile picture`}
-            />
+            <Image src={profilePictureUri} height={10} width={10} alt={``} />
           </div>
         </div>
       </header>

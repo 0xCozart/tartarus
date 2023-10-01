@@ -24,7 +24,10 @@ export default function Home({ ethProvider }: HomeProps) {
     console.log("home page", { ethProvider });
     return (
       <div className="relative flex h-screen w-full overflow-hidden bg-white">
-        <PageWrapper displayName="" profilePictureUri="">
+        <PageWrapper
+          displayName={data.viewer.tartarusProfile.displayName}
+          profilePictureUri=""
+        >
           <HomeChat
             provider={ethProvider.provider}
             signer={ethProvider.signer}

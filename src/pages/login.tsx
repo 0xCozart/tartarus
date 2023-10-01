@@ -17,13 +17,10 @@ const Login = ({ setEthProvider }: LoginProps) => {
   return (
     <div>
       <main className="flex min-h-screen flex-col items-center justify-center">
-        <a
-          href="#"
-          className="block max-w-sm rounded-lg border border-gray-200 bg-white p-6 shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-        >
+        <div className="border-gray background-animate to-rose-700 from-slate-500 block max-w-sm rounded-lg border bg-gradient-to-r via-indigo-600 bg-300% p-6 shadow">
           <p className="font-normal text-gray-700 dark:text-gray-400"></p>
           <LoginTerminal connectMetamask={connectMetamask} />
-        </a>
+        </div>
       </main>
     </div>
   );
