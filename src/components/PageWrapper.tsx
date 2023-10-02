@@ -13,19 +13,8 @@ const PageWrapper = ({
   children,
 }: PageWrapperProps) => {
   return (
-    <div className="h-full w-full">
+    <div className="relative flex h-screen w-full overflow-hidden bg-white">
       {/* Topbar starts */}
-      <header className="relative flex h-16 w-full items-center justify-end space-x-10 bg-gray-800 px-5">
-        <div className="flex flex-shrink-0 items-center space-x-2 text-white">
-          <div className="text-md font-medium ">{displayName}</div>
-          {/* <div className="font-regular text-sm">Student</div> */}
-          <div className="h-10 w-10 cursor-pointer rounded-full border-2 border-blue-400 bg-gray-200">
-            <Image src={profilePictureUri} height={10} width={10} alt={``} />
-          </div>
-        </div>
-      </header>
-      {/* Topbar ends */}
-      {/* Sidebar starts */}
       <aside className="relative flex h-full w-16 flex-col items-center justify-center space-y-10 bg-gray-800 text-white">
         <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg hover:bg-white hover:text-gray-800  hover:duration-300 hover:ease-linear focus:bg-white">
           <svg
@@ -97,10 +86,23 @@ const PageWrapper = ({
           </svg>
         </div>
       </aside>
-      {/* Sidebar ends */}
       <div className="flex h-full w-full flex-col justify-between">
-        {children}
+        <header className="relative flex h-16 w-full items-center justify-end space-x-10 bg-gray-800 px-5">
+          <div className="flex flex-shrink-0 items-center space-x-2 text-white">
+            <div className="text-md font-medium ">{displayName}</div>
+            {/* <div className="font-regular text-sm">Student</div> */}
+            <div className="h-10 w-10 cursor-pointer rounded-full border-2 border-blue-400 bg-gray-200">
+              <Image src={profilePictureUri} height={10} width={10} alt={``} />
+            </div>
+          </div>
+        </header>
+        <main className="relative flex h-full max-w-full overflow-y-hidden">
+          {children}
+        </main>
       </div>
+      {/* Topbar ends */}
+      {/* Sidebar starts */}
+      {/* Sidebar ends */}
     </div>
   );
 };
