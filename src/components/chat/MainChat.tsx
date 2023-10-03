@@ -8,8 +8,9 @@ type MainChatProps = {
 function MainChat({ tartarusProfile }: MainChatProps) {
   const { displayName } = tartarusProfile;
   return (
-    <div className="mb-1 flex h-screen text-gray-800 antialiased">
+    <div className="mb-0 flex text-gray-800 antialiased">
       <div className="flex h-full w-full flex-row overflow-x-hidden">
+        {/* Sidebar starts*/}
         <div className="flex w-64 flex-shrink-0 flex-col bg-white py-8 pl-6 pr-2">
           <div className="flex h-12 w-full flex-row items-center justify-center">
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-700">
@@ -28,8 +29,9 @@ function MainChat({ tartarusProfile }: MainChatProps) {
                 ></path>
               </svg>
             </div>
-            <div className="ml-2 text-2xl font-bold">QuickChat</div>
+            <div className="ml-2 text-2xl font-bold">Tartarus</div>
           </div>
+          {/* Profile card starts (might make this a seperate component) */}
           <div className="mt-4 flex w-full flex-col items-center rounded-lg border border-gray-200 bg-indigo-100 px-4 py-6">
             <div className="h-20 w-20 overflow-hidden rounded-full border">
               <Image
@@ -49,14 +51,19 @@ function MainChat({ tartarusProfile }: MainChatProps) {
               <div className="ml-1 text-xs leading-none">Active</div>
             </div>
           </div>
+          {/* Profile card ends */}
+          {/* Room section starts */}
+          {/* create a loading animation while rooms are loading */}
           <div className="mt-8 flex flex-col">
+            {/* Room title start */}
             <div className="flex flex-row items-center justify-between text-xs">
-              <span className="font-bold">Active Conversations</span>
-              <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gray-300">
-                4
-              </span>
+              <span className="font-bold">Rooms</span>
+              {/* Room number*/}
+              <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gray-300"></span>
             </div>
-            <div className="-mx-2 mt-4 flex h-48 flex-col space-y-1 overflow-y-auto">
+            {/* Room title ends */}
+            {/* Room list start */}
+            <div className="h-100 -mx-2 mt-4 flex flex-col space-y-1 overflow-y-auto">
               <button className="flex flex-row items-center rounded-xl p-2 hover:bg-gray-100">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-200">
                   H
@@ -91,7 +98,9 @@ function MainChat({ tartarusProfile }: MainChatProps) {
                 <div className="ml-2 text-sm font-semibold">Jerry Guzman</div>
               </button>
             </div>
-            <div className="mt-6 flex flex-row items-center justify-between text-xs">
+            {/* Room list ends */}
+            {/* Seperate section starts (will asign us to it later perhaps) */}
+            {/* <div className="mt-6 flex flex-row items-center justify-between text-xs">
               <span className="font-bold">Archivied</span>
               <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gray-300">
                 7
@@ -104,9 +113,13 @@ function MainChat({ tartarusProfile }: MainChatProps) {
                 </div>
                 <div className="ml-2 text-sm font-semibold">Henry Boyd</div>
               </button>
-            </div>
+            </div> */}
+            {/* Seperate section ends */}
           </div>
+          {/* Room section ends */}
         </div>
+        {/* Sidebar ends*/}
+        {/* Chat starts */}
         <div className="flex h-full flex-auto flex-col p-6">
           <div className="flex h-full flex-auto flex-shrink-0 flex-col rounded-2xl bg-gray-100 p-4">
             <div className="mb-4 flex h-full flex-col overflow-x-auto">
@@ -225,39 +238,6 @@ function MainChat({ tartarusProfile }: MainChatProps) {
                               ></path>
                             </svg>
                           </button>
-                          <div className="ml-4 flex flex-row items-center space-x-px">
-                            <div className="h-2 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-2 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-4 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-8 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-8 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-10 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-10 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-12 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-10 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-6 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-5 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-4 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-3 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-2 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-2 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-2 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-10 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-2 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-10 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-8 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-8 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-1 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-1 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-2 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-8 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-8 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-2 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-2 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-2 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-2 w-1 rounded-lg bg-gray-500"></div>
-                            <div className="h-4 w-1 rounded-lg bg-gray-500"></div>
-                          </div>
                         </div>
                       </div>
                     </div>

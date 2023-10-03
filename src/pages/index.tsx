@@ -27,7 +27,9 @@ export default function Home({ ethProvider }: HomeProps) {
         displayName={data.viewer.tartarusProfile.displayName}
         profilePictureUri=""
       >
-        <MainChat tartarusProfile={data.viewer.tartarusProfile} />
+        <MainChat
+          tartarusProfile={data.viewer.tartarusProfile as TartarusProfile}
+        />
       </PageWrapper>
     );
   }
