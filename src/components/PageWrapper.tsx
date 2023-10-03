@@ -100,9 +100,6 @@ const PageWrapper = ({
           {children}
         </main>
       </div>
-      {/* Topbar ends */}
-      {/* Sidebar starts */}
-      {/* Sidebar ends */}
     </div>
   );
 };

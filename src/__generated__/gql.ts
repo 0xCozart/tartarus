@@ -14,7 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  mutation CREATE_TARTARUSPROFILE($i: CreateTartarusProfileInput!) {\n    createTartarusProfile(input: $i) {\n      viewer {\n        id\n        isViewer\n        messageList(first: 10) {\n          edges {\n            node {\n              createdAt\n              id\n              message\n              roomId\n              room {\n                id\n                key\n              }\n            }\n          }\n        }\n        tartarusProfile {\n          createdAt\n          displayName\n          id\n          profilePicture\n          friends {\n            id\n            isViewer\n          }\n        }\n      }\n    }\n  }\n": types.Create_TartarusprofileDocument,
-    "\n  query TartarusProfileQuery {\n    viewer {\n      tartarusProfile {\n        createdAt\n        displayName\n        friends {\n          id\n        }\n        id\n        profilePicture\n      }\n    }\n  }\n": types.TartarusProfileQueryDocument,
+    "\n  query TartarusProfileQuery {\n    viewer {\n      tartarusProfile {\n        createdAt\n        displayName\n        friends {\n          id\n        }\n        id\n        profilePicture\n        rooms (first: 10) {\n          edges {\n            node {\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n": types.TartarusProfileQueryDocument,
 };
 
 /**
@@ -38,7 +38,7 @@ export function gql(source: "\n  mutation CREATE_TARTARUSPROFILE($i: CreateTarta
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query TartarusProfileQuery {\n    viewer {\n      tartarusProfile {\n        createdAt\n        displayName\n        friends {\n          id\n        }\n        id\n        profilePicture\n      }\n    }\n  }\n"): (typeof documents)["\n  query TartarusProfileQuery {\n    viewer {\n      tartarusProfile {\n        createdAt\n        displayName\n        friends {\n          id\n        }\n        id\n        profilePicture\n      }\n    }\n  }\n"];
+export function gql(source: "\n  query TartarusProfileQuery {\n    viewer {\n      tartarusProfile {\n        createdAt\n        displayName\n        friends {\n          id\n        }\n        id\n        profilePicture\n        rooms (first: 10) {\n          edges {\n            node {\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query TartarusProfileQuery {\n    viewer {\n      tartarusProfile {\n        createdAt\n        displayName\n        friends {\n          id\n        }\n        id\n        profilePicture\n        rooms (first: 10) {\n          edges {\n            node {\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};
