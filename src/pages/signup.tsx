@@ -1,11 +1,11 @@
 import { useMutation } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { type CreateTartarusProfileInput } from "~/__generated__/graphql";
-import { CREATE_TARTARUSPROFILE } from "~/api/apollo/mutations";
+import { CREATE_TARTARUS_PROFILE } from "~/api/apollo/mutations";
 import { SignUpTerminal } from "~/components/terminals";
 
 const SignUp = () => {
-  const [createProfile, { data }] = useMutation(CREATE_TARTARUSPROFILE);
+  const [createProfile, { data }] = useMutation(CREATE_TARTARUS_PROFILE);
   const [mutationData, setMutationData] =
     useState<CreateTartarusProfileInput>();
 
@@ -13,7 +13,7 @@ const SignUp = () => {
     if (mutationData?.content.displayName) {
       void createProfile({ variables: { i: { ...mutationData } } });
     }
-    console.log({ data });
+    // console.log({ data });
   }, [mutationData, createProfile, data]);
 
   return (
