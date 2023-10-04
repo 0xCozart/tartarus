@@ -1,26 +1,11 @@
 import { gql } from "~/__generated__/gql";
 
 // Tartarus username mutation
-const CREATE_TARTARUSPROFILE = gql(`
-  mutation CREATE_TARTARUSPROFILE($i: CreateTartarusProfileInput!) {
+const CREATE_TARTARUS_PROFILE = gql(`
+  mutation CreateTartarusProfile($i: CreateTartarusProfileInput!) {
     createTartarusProfile(input: $i) {
       viewer {
         id
-        isViewer
-        messageList(first: 10) {
-          edges {
-            node {
-              createdAt
-              id
-              message
-              roomId
-              room {
-                id
-                key
-              }
-            }
-          }
-        }
         tartarusProfile {
           createdAt
           displayName
@@ -28,7 +13,6 @@ const CREATE_TARTARUSPROFILE = gql(`
           profilePicture
           friends {
             id
-            isViewer
           }
         }
       }
@@ -36,4 +20,22 @@ const CREATE_TARTARUSPROFILE = gql(`
   }
 `);
 
-export { CREATE_TARTARUSPROFILE };
+const UPDATE_TARTARUS_PROFILE = gql(`
+  mutation UpdateProfilePicture($i: UpdateTartarusProfileInput!) {
+    updateTartarusProfile(input: $i) {
+      clientMutationId
+       viewer {
+        id
+        isViewer
+        tartarusProfile {
+          createdAt
+          displayName
+          id
+          profilePicture
+        }
+      }
+    }
+  }
+`);
+
+export { CREATE_TARTARUS_PROFILE, UPDATE_TARTARUS_PROFILE };
