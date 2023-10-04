@@ -6,7 +6,9 @@ import {
   type NormalizedCacheObject,
 } from "@apollo/client";
 import { loadErrorMessages } from "@apollo/client/dev";
+import { dagCbor, type DAGCBOR } from "@helia/dag-cbor";
 import { DIDSession } from "did-session";
+import { createHelia } from "helia";
 import { type AppType } from "next/dist/shared/lib/utils";
 import Head from "next/head";
 import { useEffect, useState } from "react";
@@ -16,11 +18,12 @@ import ComposeApolloClient, {
   type EthProvider,
 } from "~/api/apollo/client";
 import Login from "~/pages/login";
+
 import "~/styles/globals.css";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const [client, setClient] = useState<ApolloClient<NormalizedCacheObject>>();
-  // const [isAuthed, setIsAuthed] = useState(false);
+  const [helia, setHelia] = useState<DAGCBOR>();
   // const router = useRouter();
   const [ethProvider, setEthProvider] = useState<Awaited<EthProvider>>({
     provider: undefined,
@@ -32,6 +35,15 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   loadErrorMessages();
 
   useEffect(() => {
+    if (!helia) {
+      createHelia()
+        .then((res) => {
+          console.log({ res });
+          const d = dagCbor(res);
+          setHelia(d);
+        })
+        .catch(console.error);
+    }
     if (sessionDid && !client) {
       DIDSession.fromSession(sessionDid)
         .then((res) => {
@@ -58,7 +70,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         })
         .catch(console.error);
     }
-  }, [ethProvider, client, sessionDid]);
+  }, [ethProvider, client, sessionDid, helia]);
 
   if (!client)
     return (

@@ -1,9 +1,22 @@
-import * as IPFS from "ipfs-core";
+import { type IPFS } from "ipfs-core-types";
 
-import fs from "fs";
+const uploadImageIpfs = (ipfs: IPFS, imageBuffer: Buffer): string | null => {
+  let cid = null;
 
-const ipfs = await IPFS.create();
+  if (ipfs) {
+    ipfs
+      .add(imageBuffer)
+      .then((res) => {
+        if (res.cid) {
+          cid = res.cid;
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
 
-const buffer = fs.readFileSync(`${imagesDir}/${file}`);
-const result = await ipfs.add(buffer);
-console.log(result);
+  return cid;
+};
+
+export { uploadImageIpfs };
