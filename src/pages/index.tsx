@@ -16,6 +16,8 @@ type HomeProps = {
 };
 
 export default function Home({ ethProvider, helia }: HomeProps) {
+  const [imageBuffer, setImageBuffer] = useState<Buffer>();
+
   const [
     getProfile,
     { loading: getProfileLoading, error: getProfileError, data: profileData },
@@ -24,8 +26,6 @@ export default function Home({ ethProvider, helia }: HomeProps) {
     updateProfile,
     { loading: updateProfileLoading, data: updateProfileData },
   ] = useMutation(UPDATE_TARTARUS_PROFILE);
-
-  const [imageBuffer, setImageBuffer] = useState<Buffer>();
 
   const updateTartarusProfilePicture = (helia: DAGCBOR, buffer: Buffer) => {
     try {
