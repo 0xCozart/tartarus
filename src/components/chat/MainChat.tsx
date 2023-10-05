@@ -1,11 +1,13 @@
 import Image from "next/image";
+import { type Dispatch, type SetStateAction } from "react";
 import { type TartarusProfile } from "~/__generated__/graphql";
 
 type MainChatProps = {
   tartarusProfile: TartarusProfile;
+  setImageBuffer: Dispatch<SetStateAction<Buffer | undefined>>;
 };
 
-function MainChat({ tartarusProfile }: MainChatProps) {
+function MainChat({ tartarusProfile, setImageBuffer }: MainChatProps) {
   const { displayName } = tartarusProfile;
   return (
     <div className="mb-0 flex text-gray-800 antialiased">
@@ -247,9 +249,20 @@ function MainChat({ tartarusProfile }: MainChatProps) {
             </div>
             <div className="flex h-16 w-full flex-row items-center rounded-xl bg-white px-4">
               <div>
-                <button
+                <input
+                  type={"file"}
+                  name="profile picture"
                   className="flex items-center justify-center text-gray-400 hover:text-gray-600"
-                  onClick={}
+                  onChange={(event) => {
+                    if (event.target.files?.[0]) {
+                      event.target.files[0]
+                        .arrayBuffer()
+                        .then((res) => {
+                          setImageBuffer(Buffer.from(res));
+                        })
+                        .catch(console.error);
+                    }
+                  }}
                 >
                   <svg
                     className="h-5 w-5"
@@ -265,7 +278,7 @@ function MainChat({ tartarusProfile }: MainChatProps) {
                       d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
                     ></path>
                   </svg>
-                </button>
+                </input>
               </div>
               <div className="ml-4 flex-grow">
                 <div className="relative w-full">
