@@ -1,25 +1,14 @@
 import { type DAGCBOR } from "@helia/dag-cbor";
 
-const uploadImageHelia = (
+const uploadImageHelia = async (
   helia: DAGCBOR,
   imageBuffer: Buffer
-): string | null => {
-  let cid: string | null = null;
+): Promise<string | null | undefined> => {
+  let cid: string | null | undefined = null;
 
-  if (helia) {
-    helia
-      .add(imageBuffer.toJSON())
-      .then((res) => {
-        if (res) {
-          console.log({ res });
-          cid = res.toString();
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }
+  if (helia) cid = (await helia.add(imageBuffer.toJSON())).toString();
 
+  console.log({ cid });
   return cid;
 };
 

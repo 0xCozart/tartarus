@@ -6,9 +6,7 @@ import {
   type NormalizedCacheObject,
 } from "@apollo/client";
 import { loadErrorMessages } from "@apollo/client/dev";
-import { dagCbor, type DAGCBOR } from "@helia/dag-cbor";
 import { DIDSession } from "did-session";
-import { createHelia } from "helia";
 import { type AppType } from "next/dist/shared/lib/utils";
 import Head from "next/head";
 import { useEffect, useState } from "react";
@@ -23,7 +21,6 @@ import "~/styles/globals.css";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const [client, setClient] = useState<ApolloClient<NormalizedCacheObject>>();
-  const [helia, setHelia] = useState<DAGCBOR>();
   // const router = useRouter();
   const [ethProvider, setEthProvider] = useState<Awaited<EthProvider>>({
     provider: undefined,
@@ -35,15 +32,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   loadErrorMessages();
 
   useEffect(() => {
-    if (!helia) {
-      createHelia()
-        .then((res) => {
-          console.log({ res });
-          const d = dagCbor(res);
-          setHelia(d);
-        })
-        .catch(console.error);
-    }
     if (sessionDid && !client) {
       DIDSession.fromSession(sessionDid)
         .then((res) => {
@@ -52,7 +40,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
             ComposeApolloClient(ethProvider, sessionDid)
               .then((res) => {
                 if (res?.sessionString) {
-                  console.log({ res });
                   setClient(res.client);
                 }
               })
@@ -70,7 +57,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         })
         .catch(console.error);
     }
-  }, [ethProvider, client, sessionDid, helia]);
+  }, [ethProvider, client, sessionDid]);
 
   if (!client)
     return (
@@ -93,7 +80,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         {/* <Layout> */}
-        <Component {...pageProps} ethProvider={ethProvider} ipfs={helia} />
+        <Component {...pageProps} ethProvider={ethProvider} />
         {/* </Layout> */}
       </ApolloProvider>
     );
