@@ -44,6 +44,7 @@ export default function Home() {
         })
         .catch(console.error);
     }
+    console.log({ profileData });
   }, [profileData, getProfile, helia]);
 
   useEffect(() => {
@@ -54,9 +55,6 @@ export default function Home() {
             .then((cid) => {
               if (cid) {
                 if (profileData?.viewer?.tartarusProfile?.id && cid) {
-                  console.log({
-                    pic: profileData?.viewer?.tartarusProfile?.profilePicture,
-                  });
                   updateProfile({
                     variables: {
                       i: {
