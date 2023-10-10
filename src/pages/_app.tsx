@@ -14,7 +14,7 @@ import secureLocalStorage from "react-secure-storage";
 import ComposeApolloClient, {
   getEthWindowProvider,
   type EthProvider,
-} from "~/apollo/client";
+} from "~/api/apollo/client";
 import Login from "~/pages/login";
 
 import "~/styles/globals.css";

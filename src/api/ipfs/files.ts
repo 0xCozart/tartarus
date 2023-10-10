@@ -1,4 +1,5 @@
 import pinataSDK from "@pinata/sdk";
+import fs from "fs";
 import { type NextApiRequest, type NextApiResponse } from "next";
 import { env } from "~/env.mjs";
 
@@ -11,13 +12,11 @@ export const config = {
 };
 
 const saveFile = async (file: File) => {
-  try {
-    const response = await pinata.pinFileToIPFS(file);
+  const buffer = Buffer.from(file.toString());
+  const stream = fs.createReadStream(buffer);
+  const cid = await pinata.pinFileToIPFS(stream);
 
-    return response;
-  } catch (error) {
-    throw new Error(error);
-  }
+  return cid;
 };
 
 type ResponseData = {

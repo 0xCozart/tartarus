@@ -1,8 +1,8 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { type TartarusProfile } from "~/__generated__/graphql";
-import { UPDATE_TARTARUS_PROFILE } from "~/apollo/mutations";
-import { GET_TARTARUS_PROFILE } from "~/apollo/querys";
+import { UPDATE_TARTARUS_PROFILE } from "~/api/apollo/mutations";
+import { GET_TARTARUS_PROFILE } from "~/api/apollo/querys";
 import PageWrapper from "~/components/PageWrapper";
 import MainChat from "~/components/chat/MainChat";
 
@@ -34,10 +34,14 @@ export default function Home() {
   useEffect(() => {
     const uploadFilePinata = async (file: File) => {
       try {
-        const res = await fetch("/api/files", {
+        const res = await fetch("/api/ipfs/files", {
           method: "POST",
           body: file,
         });
+        res
+          .text()
+          .then((res) => console.log({ res }))
+          .catch(console.error);
         return await res.text();
       } catch (err) {
         console.error(err);
@@ -48,6 +52,7 @@ export default function Home() {
       uploadFilePinata(file)
         .then((res) => {
           if (res && profileData?.viewer?.tartarusProfile?.id) {
+            console.log("upload", res);
             updateProfile({
               variables: {
                 i: {

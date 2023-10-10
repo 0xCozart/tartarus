@@ -26,6 +26,7 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
   ) => {
     event.preventDefault();
     if (event.target.files?.[0]) {
+      console.log("image", event.target.files[0]);
       setFile(event.target.files[0]);
     }
   };
@@ -293,7 +294,7 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
                 <input
                   type="file"
                   ref={imageUploadRef}
-                  onChange={handleFileInputChange}
+                  onChange={(event) => handleFileInputChange(event)}
                   style={{ display: "none" }}
                 />
               </div>
