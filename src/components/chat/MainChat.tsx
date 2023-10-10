@@ -9,10 +9,10 @@ import { type TartarusProfile } from "~/__generated__/graphql";
 
 type MainChatProps = {
   tartarusProfile: TartarusProfile;
-  setImageBuffer: Dispatch<SetStateAction<Buffer | undefined>>;
+  setFile: Dispatch<SetStateAction<File | undefined>>;
 };
 
-function MainChat({ tartarusProfile, setImageBuffer }: MainChatProps) {
+function MainChat({ tartarusProfile, setFile }: MainChatProps) {
   const imageUploadRef = useRef<HTMLInputElement>(null);
 
   const { displayName } = tartarusProfile;
@@ -21,16 +21,12 @@ function MainChat({ tartarusProfile, setImageBuffer }: MainChatProps) {
     if (imageUploadRef.current) imageUploadRef.current.click();
   };
 
-  const handleImageInputChange: ChangeEventHandler<HTMLInputElement> = (
+  const handleFileInputChange: ChangeEventHandler<HTMLInputElement> = (
     event
   ) => {
+    event.preventDefault();
     if (event.target.files?.[0]) {
-      event.target.files[0]
-        .arrayBuffer()
-        .then((res) => {
-          setImageBuffer(Buffer.from(res));
-        })
-        .catch(console.error);
+      setFile(event.target.files[0]);
     }
   };
 
@@ -297,7 +293,7 @@ function MainChat({ tartarusProfile, setImageBuffer }: MainChatProps) {
                 <input
                   type="file"
                   ref={imageUploadRef}
-                  onChange={handleImageInputChange}
+                  onChange={handleFileInputChange}
                   style={{ display: "none" }}
                 />
               </div>

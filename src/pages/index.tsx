@@ -1,22 +1,18 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { dagCbor, type DAGCBOR } from "@helia/dag-cbor";
-import { createHelia } from "helia";
 import { useEffect, useState } from "react";
 import { type TartarusProfile } from "~/__generated__/graphql";
-import { UPDATE_TARTARUS_PROFILE } from "~/api/apollo/mutations";
-import { GET_TARTARUS_PROFILE } from "~/api/apollo/querys";
-import { uploadImageHelia } from "~/api/helia";
+import { UPDATE_TARTARUS_PROFILE } from "~/apollo/mutations";
+import { GET_TARTARUS_PROFILE } from "~/apollo/querys";
 import PageWrapper from "~/components/PageWrapper";
 import MainChat from "~/components/chat/MainChat";
 
 export default function Home() {
-  const [helia, setHelia] = useState<DAGCBOR>();
-  const [imageBuffer, setImageBuffer] = useState<Buffer>();
+  const [file, setFile] = useState<File>();
 
   /* --------------------------<graphql>-------------------------------------------- */
   const [
     getProfile,
-    { loading: getProfileLoading, error: getProfileError, data: profileData },
+    { loading: profileLoading, error: profileError, data: profileData },
   ] = useLazyQuery(GET_TARTARUS_PROFILE);
 
   const [
@@ -33,53 +29,47 @@ export default function Home() {
         pic: profileData?.viewer?.tartarusProfile?.profilePicture,
       });
     }
+  }, [profileData, getProfile]);
 
-    if (!helia) {
-      createHelia()
+  useEffect(() => {
+    const uploadFilePinata = async (file: File) => {
+      try {
+        const res = await fetch("/api/files", {
+          method: "POST",
+          body: file,
+        });
+        return await res.text();
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    if (file) {
+      uploadFilePinata(file)
         .then((res) => {
-          console.log({ res });
-          const d = dagCbor(res);
-          console.log({ d });
-          setHelia(d);
+          if (res && profileData?.viewer?.tartarusProfile?.id) {
+            updateProfile({
+              variables: {
+                i: {
+                  id: profileData?.viewer?.tartarusProfile?.id,
+                  content: {
+                    profilePicture: res,
+                  },
+                },
+              },
+            })
+              .then((res) => {
+                console.log("updateProfile res: ", res);
+                void getProfile();
+              })
+              .catch(console.error);
+          }
         })
         .catch(console.error);
     }
-    console.log({ profileData });
-  }, [profileData, getProfile, helia]);
-
-  useEffect(() => {
-    if (imageBuffer && helia) {
-      const updateTartarusProfilePicture = (helia: DAGCBOR, buffer: Buffer) => {
-        try {
-          uploadImageHelia(helia, buffer)
-            .then((cid) => {
-              if (cid) {
-                if (profileData?.viewer?.tartarusProfile?.id && cid) {
-                  updateProfile({
-                    variables: {
-                      i: {
-                        id: profileData?.viewer?.tartarusProfile?.id,
-                        content: { profilePicture: cid },
-                      },
-                    },
-                  })
-                    .then((res) => {
-                      console.log({ res });
-                    })
-                    .catch(console.error);
-                }
-              }
-            })
-            .catch(console.error);
-        } catch (err) {
-          console.error(err);
-        }
-      };
-      updateTartarusProfilePicture(helia, imageBuffer);
-    }
   }, [
-    imageBuffer,
-    helia,
+    getProfile,
+    file,
     profileData?.viewer?.tartarusProfile?.id,
     updateProfile,
     profileData?.viewer?.tartarusProfile?.profilePicture,
@@ -96,7 +86,7 @@ export default function Home() {
           tartarusProfile={
             profileData.viewer.tartarusProfile as TartarusProfile
           }
-          setImageBuffer={setImageBuffer}
+          setFile={setFile}
         />
       </PageWrapper>
     );

@@ -1,5 +1,3 @@
-// import pkg from "@apollo/client";
-// const { gql } = pkg;
 import {
   ApolloClient,
   ApolloLink,
@@ -26,6 +24,7 @@ export const getEthWindowProvider = () => {
   try {
     if (typeof window.ethereum !== undefined) {
       provider = new ethers.providers.Web3Provider(window.ethereum);
+      void provider.send("eth_requestAccounts", []);
       signer = provider.getSigner();
     }
     return { provider, signer };
@@ -63,6 +62,7 @@ const ComposeApolloClient = async (
       ceramic: env.NEXT_PUBLIC_COMPOSEDB_URL || "http://localhost:7007",
       definition,
     });
+    console.log({ address, accountId, authMethod, compose });
 
     let newSession;
     let sessionString;

@@ -14,7 +14,7 @@ import secureLocalStorage from "react-secure-storage";
 import ComposeApolloClient, {
   getEthWindowProvider,
   type EthProvider,
-} from "~/api/apollo/client";
+} from "~/apollo/client";
 import Login from "~/pages/login";
 
 import "~/styles/globals.css";
@@ -27,18 +27,21 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     signer: undefined,
   });
   const sessionDid = secureLocalStorage.getItem("sessionDid") as string;
+  console.log({ sessionDid });
 
   // Adds messages only in a dev environment
   loadErrorMessages();
 
   useEffect(() => {
-    if (sessionDid && !client) {
+    if (sessionDid && ethProvider && !client) {
       DIDSession.fromSession(sessionDid)
         .then((res) => {
+          console.log("has session: ", { res });
           if (!res.isExpired) {
             const ethProvider = getEthWindowProvider();
             ComposeApolloClient(ethProvider, sessionDid)
               .then((res) => {
+                console.log({ res });
                 if (res?.sessionString) {
                   setClient(res.client);
                 }
@@ -47,9 +50,10 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           }
         })
         .catch((err) => console.error(err));
-    } else if (ethProvider && !client) {
+    } else if (!sessionDid && ethProvider && !client) {
       ComposeApolloClient(ethProvider, sessionDid)
         .then((res) => {
+          console.log("no session: ", { res });
           if (res?.sessionString) {
             secureLocalStorage.setItem("sessionDid", res.sessionString);
             setClient(res.client);

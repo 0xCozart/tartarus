@@ -1,7 +1,7 @@
 "use client";
 
 import { type Dispatch, type SetStateAction } from "react";
-import { getEthWindowProvider, type EthProvider } from "~/api/apollo/client";
+import { getEthWindowProvider, type EthProvider } from "~/apollo/client";
 import { LoginTerminal } from "~/components/terminals/";
 
 type LoginProps = {
@@ -11,6 +11,7 @@ type LoginProps = {
 const Login = ({ setEthProvider }: LoginProps) => {
   const connectMetamask = () => {
     const provider = getEthWindowProvider();
+    console.log({ provider });
     setEthProvider(provider);
   };
 

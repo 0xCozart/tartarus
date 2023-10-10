@@ -19,6 +19,8 @@ export const env = createEnv({
     NEXT_PUBLIC_COMPOSEDB_URL: z.string().nonempty(),
     NEXT_PUBLIC_GRAPHQL_URL: z.string().nonempty(),
     NEXT_PUBLIC_LAVA_GATEWAY: z.string().nonempty(),
+    NEXT_PUBLIC_PINATA_JWT: z.string().nonempty(),
+    NEXT_PUBLIC_PINATA_GATEWAY: z.string().nonempty(),
   },
 
   /**
@@ -30,6 +32,8 @@ export const env = createEnv({
     NEXT_PUBLIC_COMPOSEDB_URL: process.env.NEXT_PUBLIC_COMPOSEDB_URL,
     NEXT_PUBLIC_GRAPHQL_URL: process.env.NEXT_PUBLIC_GRAPHQL_URL,
     NEXT_PUBLIC_LAVA_GATEWAY: process.env.NEXT_PUBLIC_LAVA_GATEWAY,
+    NEXT_PUBLIC_PINATA_JWT: process.env.NEXT_PUBLIC_PINATA_JWT,
+    NEXT_PUBLIC_PINATA_GATEWAY: process.env.NEXT_PUBLIC_PINATA_GATEWAY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
