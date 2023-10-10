@@ -32,24 +32,28 @@ export default function Home() {
   }, [profileData, getProfile]);
 
   useEffect(() => {
-    const uploadFilePinata = async (file: File) => {
-      try {
-        const res = await fetch("/api/ipfs/files", {
-          method: "POST",
-          body: file,
-        });
-        res
-          .text()
-          .then((res) => console.log({ res }))
-          .catch(console.error);
-        return await res.text();
-      } catch (err) {
-        console.error(err);
+    const uploadFilePinata = async () => {
+      if (file) {
+        try {
+          const formData = new FormData();
+          formData.append("file", file);
+          const res = await fetch("/api/ipfs/files", {
+            method: "POST",
+            body: formData,
+          });
+          res
+            .text()
+            .then((res) => console.log({ res }))
+            .catch(console.error);
+          return await res.text();
+        } catch (err) {
+          console.error(err);
+        }
       }
     };
 
     if (file) {
-      uploadFilePinata(file)
+      uploadFilePinata()
         .then((res) => {
           if (res && profileData?.viewer?.tartarusProfile?.id) {
             console.log("upload", res);
