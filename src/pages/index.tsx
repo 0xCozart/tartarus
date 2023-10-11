@@ -41,10 +41,6 @@ export default function Home() {
             method: "POST",
             body: formData,
           });
-          res
-            .text()
-            .then((res) => console.log({ res }))
-            .catch(console.error);
           return await res.text();
         } catch (err) {
           console.error(err);

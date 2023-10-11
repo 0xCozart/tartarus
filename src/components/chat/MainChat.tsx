@@ -271,6 +271,12 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
             </div>
             <div className="flex h-16 w-full flex-row items-center rounded-xl bg-white px-4">
               <div>
+                <input
+                  type="file"
+                  ref={imageUploadRef}
+                  onChange={(event) => handleFileInputChange(event)}
+                  style={{ display: "none" }}
+                />
                 <button
                   name="profile picture upload"
                   className="flex items-center justify-center text-gray-400 hover:text-gray-600"
@@ -291,12 +297,6 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
                     ></path>
                   </svg>
                 </button>
-                <input
-                  type="file"
-                  ref={imageUploadRef}
-                  onChange={(event) => handleFileInputChange(event)}
-                  style={{ display: "none" }}
-                />
               </div>
               <div className="ml-4 flex-grow">
                 <div className="relative w-full">
