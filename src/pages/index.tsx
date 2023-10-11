@@ -37,7 +37,8 @@ export default function Home() {
         try {
           const formData = new FormData();
           formData.append("file", file);
-          const res = await fetch("/api/ipfs/files", {
+          formData.append("name", file.name);
+          const res = await fetch("/api/files", {
             method: "POST",
             body: formData,
           });

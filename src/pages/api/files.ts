@@ -2,7 +2,7 @@ import pinataSDK from "@pinata/sdk";
 import * as formidable from "formidable";
 import fs from "fs";
 import { type NextApiRequest, type NextApiResponse } from "next";
-import { env } from "../../../env.mjs";
+import { env } from "../../env.mjs";
 
 const pinata = new pinataSDK({ pinataJWTKey: env.NEXT_PUBLIC_PINATA_JWT });
 
@@ -16,12 +16,12 @@ type FileWithPath = File & {
   filepath: string;
 };
 
-const saveFile = async (file: FileWithPath, fields: { name: string }) => {
+const saveFile = async (file: FileWithPath, fileName: string) => {
   try {
     const stream = fs.createReadStream(file.filepath);
     const options = {
       pinataMetadata: {
-        name: fields.name,
+        name: fileName,
       },
     };
     const response = await pinata.pinFileToIPFS(stream, options);
@@ -44,19 +44,21 @@ export default async function handler(
   if (req.method === "POST") {
     try {
       const form = new formidable.IncomingForm();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 
       form.parse(req, function (err, fields, files) {
+        console.log({ fields, files });
         if (err) {
-          console.log(err);
+          console.log("POST error: ", err);
           return res.status(500).send({ message: "Upload Error" });
         }
-        if (files.file) {
+        if (files.file && fields.name?.[0]) {
           console.log({ files });
-          saveFile(files.file[0] as unknown as FileWithPath, fields)
+          saveFile(files.file[0] as unknown as FileWithPath, fields.name[0])
             .then((response) => {
               if (response)
                 return res.status(200).send({ cid: response.IpfsHash });
+              else
+                return res.status(500).send({ message: "File saving failed" });
             })
             .catch(console.error);
         }
