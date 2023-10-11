@@ -4,6 +4,8 @@
  */
 await import("./src/env.mjs");
 
+import { env } from "./src/env.mjs";
+
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
@@ -19,8 +21,20 @@ const config = {
   },
   images: {
     remotePatterns: [
-      { protocol: "https", hostname: "source.unsplash.com", port: "" },
+      {
+        protocol: "https",
+        hostname: env.NEXT_PUBLIC_PINATA_GATEWAY,
+        port: "",
+        pathname: "/ipfs/**",
+      },
     ],
+  },
+  webpackDevMiddleware: (config) => {
+    config.watchOptions = {
+      poll: 1000,
+      aggregateTimeout: 300,
+    };
+    return config;
   },
 };
 

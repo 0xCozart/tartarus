@@ -67,6 +67,7 @@ export default function Home() {
               .then((res) => {
                 console.log("updateProfile res: ", res);
                 void getProfile();
+                setFile(undefined);
               })
               .catch(console.error);
           }
