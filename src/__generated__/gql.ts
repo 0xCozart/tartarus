@@ -15,6 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n  mutation CreateTartarusProfile($i: CreateTartarusProfileInput!) {\n    createTartarusProfile(input: $i) {\n      viewer {\n        id\n        tartarusProfile {\n          createdAt\n          displayName\n          id\n          profilePicture\n          friends {\n            id\n          }\n        }\n      }\n    }\n  }\n": types.CreateTartarusProfileDocument,
     "\n  mutation UpdateProfilePicture($i: UpdateTartarusProfileInput!) {\n    updateTartarusProfile(input: $i) {\n      clientMutationId\n       viewer {\n        id\n        isViewer\n        tartarusProfile {\n          createdAt\n          displayName\n          id\n          profilePicture\n        }\n      }\n    }\n  }\n": types.UpdateProfilePictureDocument,
+    "\n  mutation CreateRoom($i: CreateRoomInput!) {\n    createRoom(input: $i) {\n      document {\n        createdAt\n        id\n        key\n        members {\n          id\n        }\n        messages(first: 10) {\n          edges {\n            node {\n              id\n              message\n            }\n          }\n        }\n        roomName\n        tartarusProfileId\n      }\n    }\n  }\n": types.CreateRoomDocument,
     "\n  query TartarusProfileQuery {\n    viewer {\n      tartarusProfile {\n        createdAt\n        displayName\n        friends {\n          id\n        }\n        id\n        profilePicture\n        rooms (first: 10) {\n          edges {\n            node {\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n": types.TartarusProfileQueryDocument,
 };
 
@@ -40,6 +41,10 @@ export function gql(source: "\n  mutation CreateTartarusProfile($i: CreateTartar
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation UpdateProfilePicture($i: UpdateTartarusProfileInput!) {\n    updateTartarusProfile(input: $i) {\n      clientMutationId\n       viewer {\n        id\n        isViewer\n        tartarusProfile {\n          createdAt\n          displayName\n          id\n          profilePicture\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateProfilePicture($i: UpdateTartarusProfileInput!) {\n    updateTartarusProfile(input: $i) {\n      clientMutationId\n       viewer {\n        id\n        isViewer\n        tartarusProfile {\n          createdAt\n          displayName\n          id\n          profilePicture\n        }\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateRoom($i: CreateRoomInput!) {\n    createRoom(input: $i) {\n      document {\n        createdAt\n        id\n        key\n        members {\n          id\n        }\n        messages(first: 10) {\n          edges {\n            node {\n              id\n              message\n            }\n          }\n        }\n        roomName\n        tartarusProfileId\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation CreateRoom($i: CreateRoomInput!) {\n    createRoom(input: $i) {\n      document {\n        createdAt\n        id\n        key\n        members {\n          id\n        }\n        messages(first: 10) {\n          edges {\n            node {\n              id\n              message\n            }\n          }\n        }\n        roomName\n        tartarusProfileId\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

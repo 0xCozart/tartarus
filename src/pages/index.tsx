@@ -1,13 +1,16 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { type TartarusProfile } from "~/__generated__/graphql";
 import { UPDATE_TARTARUS_PROFILE } from "~/api/apollo/mutations";
 import { GET_TARTARUS_PROFILE } from "~/api/apollo/querys";
 import PageWrapper from "~/components/PageWrapper";
 import MainChat from "~/components/chat/MainChat";
+import { imageUriFromCid } from "~/utils";
 
 export default function Home() {
   const [file, setFile] = useState<File>();
+  const router = useRouter();
 
   /* --------------------------<graphql>-------------------------------------------- */
   const [
@@ -87,7 +90,9 @@ export default function Home() {
     return (
       <PageWrapper
         displayName={profileData.viewer.tartarusProfile.displayName}
-        profilePictureUri=""
+        profilePictureUri={imageUriFromCid(
+          profileData.viewer.tartarusProfile.profilePicture
+        )}
       >
         <MainChat
           tartarusProfile={

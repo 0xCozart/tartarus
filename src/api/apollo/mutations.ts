@@ -38,4 +38,29 @@ const UPDATE_TARTARUS_PROFILE = gql(`
   }
 `);
 
+const CREATE_ROOM = gql(`
+  mutation CreateRoom($i: CreateRoomInput!) {
+    createRoom(input: $i) {
+      document {
+        createdAt
+        id
+        key
+        members {
+          id
+        }
+        messages(first: 10) {
+          edges {
+            node {
+              id
+              message
+            }
+          }
+        }
+        roomName
+        tartarusProfileId
+      }
+    }
+  }
+`);
+
 export { CREATE_TARTARUS_PROFILE, UPDATE_TARTARUS_PROFILE };

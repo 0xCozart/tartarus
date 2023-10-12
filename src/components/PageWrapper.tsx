@@ -92,7 +92,7 @@ const PageWrapper = ({
             <div
               className="h-10 w-10 cursor-pointer rounded-full "
               style={{
-                backgroundImage: `url("https://violet-holy-hawk-399.mypinata.cloud/ipfs/QmUGh3heFwni5xXVKP511KY1YWtHGaKwSB9pUGs7WnCnvC")`,
+                backgroundImage: `url("${profilePictureUri}")`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}
