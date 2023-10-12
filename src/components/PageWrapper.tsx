@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { type ReactNode } from "react";
 
 type PageWrapperProps = {
@@ -90,17 +89,14 @@ const PageWrapper = ({
         <header className="relative flex h-16 w-full items-center justify-end space-x-10 bg-gray-800 px-5">
           <div className="flex flex-shrink-0 items-center space-x-2 text-white">
             <div className="text-md font-medium">{displayName}</div>
-            <div className="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-blue-400 bg-gray-200">
-              <Image
-                src={
-                  "https://violet-holy-hawk-399.mypinata.cloud/ipfs/QmUGh3heFwni5xXVKP511KY1YWtHGaKwSB9pUGs7WnCnvC"
-                }
-                height={40} // Adjusted to match the container size
-                width={40} // Adjusted to match the container size
-                alt={``}
-                objectFit="cover" // This ensures the image will cover the entire div without distorting
-              />
-            </div>
+            <div
+              className="h-10 w-10 cursor-pointer rounded-full "
+              style={{
+                backgroundImage: `url("https://violet-holy-hawk-399.mypinata.cloud/ipfs/QmUGh3heFwni5xXVKP511KY1YWtHGaKwSB9pUGs7WnCnvC")`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            />
           </div>
         </header>
         <main className="relative flex h-full max-w-full overflow-y-hidden">
