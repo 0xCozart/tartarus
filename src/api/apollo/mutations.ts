@@ -2,8 +2,8 @@ import { gql } from "~/__generated__/gql";
 
 // Tartarus username mutation
 const CREATE_TARTARUS_PROFILE = gql(`
-  mutation CreateTartarusProfile($i: CreateTartarusProfileInput!) {
-    createTartarusProfile(input: $i) {
+  mutation CreateTartarusProfile($content: CreateTartarusProfileInput!) {
+    createTartarusProfile(input: $content) {
       viewer {
         id
         tartarusProfile {
@@ -21,8 +21,8 @@ const CREATE_TARTARUS_PROFILE = gql(`
 `);
 
 const UPDATE_TARTARUS_PROFILE = gql(`
-  mutation UpdateProfilePicture($i: UpdateTartarusProfileInput!) {
-    updateTartarusProfile(input: $i) {
+  mutation UpdateProfilePicture($content: UpdateTartarusProfileInput!) {
+    updateTartarusProfile(input: $content) {
       clientMutationId
        viewer {
         id
@@ -39,8 +39,8 @@ const UPDATE_TARTARUS_PROFILE = gql(`
 `);
 
 const CREATE_ROOM = gql(`
-  mutation CreateRoom($i: CreateRoomInput!) {
-    createRoom(input: $i) {
+  mutation CreateRoom($content: CreateRoomInput!) {
+    createRoom(input: $content) {
       document {
         createdAt
         id
@@ -63,4 +63,4 @@ const CREATE_ROOM = gql(`
   }
 `);
 
-export { CREATE_TARTARUS_PROFILE, UPDATE_TARTARUS_PROFILE };
+export { CREATE_ROOM, CREATE_TARTARUS_PROFILE, UPDATE_TARTARUS_PROFILE };

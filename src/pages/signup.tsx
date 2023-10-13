@@ -11,9 +11,8 @@ const SignUp = () => {
 
   useEffect(() => {
     if (mutationData?.content.displayName) {
-      void createProfile({ variables: { i: { ...mutationData } } });
+      void createProfile({ variables: { content: { ...mutationData } } });
     }
-    // console.log({ data });
   }, [mutationData, createProfile, data]);
 
   return (

@@ -26,7 +26,6 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
   ) => {
     event.preventDefault();
     if (event.target.files?.[0]) {
-      console.log("image", event.target.files[0]);
       setFile(event.target.files[0]);
     }
   };

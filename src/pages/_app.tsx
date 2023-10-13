@@ -27,7 +27,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     signer: undefined,
   });
   const sessionDid = secureLocalStorage.getItem("sessionDid") as string;
-  console.log({ sessionDid });
 
   // Adds messages only in a dev environment
   loadErrorMessages();
@@ -36,12 +35,10 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     if (sessionDid && ethProvider && !client) {
       DIDSession.fromSession(sessionDid)
         .then((res) => {
-          console.log("has session: ", { res });
           if (!res.isExpired) {
             const ethProvider = getEthWindowProvider();
             ComposeApolloClient(ethProvider, sessionDid)
               .then((res) => {
-                console.log({ res });
                 if (res?.sessionString) {
                   setClient(res.client);
                 }
@@ -53,7 +50,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     } else if (!sessionDid && ethProvider && !client) {
       ComposeApolloClient(ethProvider, sessionDid)
         .then((res) => {
-          console.log("no session: ", { res });
           if (res?.sessionString) {
             secureLocalStorage.setItem("sessionDid", res.sessionString);
             setClient(res.client);

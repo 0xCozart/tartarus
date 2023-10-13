@@ -62,7 +62,6 @@ const ComposeApolloClient = async (
       ceramic: env.NEXT_PUBLIC_COMPOSEDB_URL || "http://localhost:7007",
       definition,
     });
-    console.log({ address, accountId, authMethod, compose });
 
     let newSession;
     let sessionString;

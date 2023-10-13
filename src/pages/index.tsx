@@ -25,13 +25,7 @@ export default function Home() {
   /* ------------------------------------------------------------------------------- */
 
   useEffect(() => {
-    if (!profileData) {
-      void getProfile();
-    } else {
-      console.log({
-        pic: profileData?.viewer?.tartarusProfile?.profilePicture,
-      });
-    }
+    if (!profileData) void getProfile();
   }, [profileData, getProfile]);
 
   useEffect(() => {
@@ -56,10 +50,9 @@ export default function Home() {
       uploadFilePinata()
         .then((res) => {
           if (res && profileData?.viewer?.tartarusProfile?.id) {
-            console.log("upload", res);
             updateProfile({
               variables: {
-                i: {
+                content: {
                   id: profileData?.viewer?.tartarusProfile?.id,
                   content: {
                     profilePicture: res,
@@ -68,7 +61,6 @@ export default function Home() {
               },
             })
               .then((res) => {
-                console.log("updateProfile res: ", res);
                 void getProfile();
                 setFile(undefined);
               })
@@ -86,7 +78,6 @@ export default function Home() {
   ]);
 
   if (profileData?.viewer?.tartarusProfile?.displayName) {
-    // console.log("home page", { ethProvider });
     return (
       <PageWrapper
         displayName={profileData.viewer.tartarusProfile.displayName}

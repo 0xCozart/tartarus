@@ -46,13 +46,10 @@ export default async function handler(
       const form = new formidable.IncomingForm();
 
       form.parse(req, function (err, fields, files) {
-        console.log({ fields, files });
         if (err) {
-          console.log("POST error: ", err);
           return res.status(500).send({ message: "Upload Error" });
         }
         if (files.file && fields.name?.[0]) {
-          console.log({ files });
           saveFile(files.file[0] as unknown as FileWithPath, fields.name[0])
             .then((response) => {
               if (response)
@@ -74,8 +71,8 @@ export default async function handler(
       });
       if (response.rows[0])
         res.json({ message: response.rows[0].ipfs_pin_hash });
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      console.error(err);
       res.status(500).send({ message: "Server Error" });
     }
   }
