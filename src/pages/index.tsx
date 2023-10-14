@@ -5,11 +5,15 @@ import { type TartarusProfile } from "~/__generated__/graphql";
 import { UPDATE_TARTARUS_PROFILE } from "~/api/apollo/mutations";
 import { GET_TARTARUS_PROFILE } from "~/api/apollo/querys";
 import PageWrapper from "~/components/PageWrapper";
-import MainChat from "~/components/chat/MainChat";
+import MainChat from "~/components/core/MainChat";
+import RoomForm from "~/components/core/RoomForm";
 import { imageUriFromCid } from "~/utils";
+
+export type ActiveTabRoutes = "chat" | "createRoom" | "profile";
 
 export default function Home() {
   const [file, setFile] = useState<File>();
+  const [activeTab, setActiveTab] = useState<ActiveTabRoutes>("chat");
   const router = useRouter();
 
   /* --------------------------<graphql>-------------------------------------------- */
@@ -84,13 +88,20 @@ export default function Home() {
         profilePictureUri={imageUriFromCid(
           profileData.viewer.tartarusProfile.profilePicture
         )}
+        setActiveTab={setActiveTab}
+        // setActiveTab={setActiveTab}
       >
-        <MainChat
-          tartarusProfile={
-            profileData.viewer.tartarusProfile as TartarusProfile
-          }
-          setFile={setFile}
-        />
+        {activeTab === "chat" && (
+          <MainChat
+            tartarusProfile={
+              profileData.viewer.tartarusProfile as TartarusProfile
+            }
+            setFile={setFile}
+          />
+        )}
+        {activeTab === "createRoom" && (
+          <RoomForm profileId={profileData.viewer.tartarusProfile.id} />
+        )}
       </PageWrapper>
     );
   }
