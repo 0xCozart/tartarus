@@ -87,12 +87,14 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
             {/* Room title ends */}
             {/* Room list start */}
             <div className="h-100 -mx-2 mt-4 flex flex-col space-y-1 overflow-y-auto">
-              <button className="flex flex-row items-center rounded-xl p-2 hover:bg-gray-100">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-200">
-                  H
-                </div>
-                <div className="ml-2 text-sm font-semibold">Henry Boyd</div>
-              </button>
+              {
+                <button className="flex flex-row items-center rounded-xl p-2 hover:bg-gray-100">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-200">
+                    H
+                  </div>
+                  <div className="ml-2 text-sm font-semibold">Henry Boyd</div>
+                </button>
+              }
               <button className="flex flex-row items-center rounded-xl p-2 hover:bg-gray-100">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200">
                   M

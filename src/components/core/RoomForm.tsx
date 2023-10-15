@@ -22,8 +22,11 @@ const RoomForm = ({ profileId }: RoomFormProps) => {
 
   const [createRoom, { data, loading }] = useMutation(CREATE_ROOM);
 
+  console.log({ data });
   const handleSubmit = async (event: FormEvent<HTMLButtonElement>) => {
+    console.log("prevent default called");
     event.preventDefault();
+    console.log("post prevent default call");
     try {
       const roomInput: RoomInput = {
         key: formData.key,
@@ -33,7 +36,10 @@ const RoomForm = ({ profileId }: RoomFormProps) => {
       };
 
       // not sure why there are two nested 'content'(s) here
-      await createRoom({ variables: { content: { content: roomInput } } });
+      const room = await createRoom({
+        variables: { content: { content: roomInput } },
+      });
+      console.log({ room });
       alert("Room created successfully!");
     } catch (err) {
       console.error("Error creating room:", err);
@@ -96,7 +102,7 @@ const RoomForm = ({ profileId }: RoomFormProps) => {
                 htmlFor="members"
                 className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
               >
-                members
+                Members
               </label>
               <input
                 type="text"
@@ -108,9 +114,12 @@ const RoomForm = ({ profileId }: RoomFormProps) => {
             </div>
 
             <button
-              type="submit"
+              type="button"
               className="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
-              onSubmit={void handleSubmit}
+              onClick={(event) => {
+                console.log("clicked");
+                void handleSubmit(event);
+              }}
             >
               Submit
             </button>

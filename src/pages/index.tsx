@@ -50,6 +50,7 @@ export default function Home() {
       }
     };
 
+    console.log({ profileData });
     if (file) {
       uploadFilePinata()
         .then((res) => {
