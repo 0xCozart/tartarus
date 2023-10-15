@@ -1,7 +1,7 @@
 import { gql } from "~/__generated__/gql";
 
 const GET_TARTARUS_PROFILE = gql(`
-  query TartarusProfileQuery {
+  query TartarusProfile {
     viewer {
       tartarusProfile {
         createdAt
@@ -23,4 +23,22 @@ const GET_TARTARUS_PROFILE = gql(`
   }
 `);
 
-export { GET_TARTARUS_PROFILE };
+const GET_ROOMS = gql(`
+  query Rooms {
+    roomIndex(first: 10) {
+      edges {
+        cursor
+        node {
+          id
+          createdAt
+          key
+          roomName
+          tartarusProfileId
+        }
+      }
+    }
+    roomCount
+  }
+`);
+
+export { GET_ROOMS, GET_TARTARUS_PROFILE };

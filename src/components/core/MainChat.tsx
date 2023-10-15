@@ -1,3 +1,4 @@
+import { useQuery } from "@apollo/client";
 import Image from "next/image";
 import {
   useRef,
@@ -5,7 +6,8 @@ import {
   type Dispatch,
   type SetStateAction,
 } from "react";
-import { type TartarusProfile } from "~/__generated__/graphql";
+import { type RoomsQuery, type TartarusProfile } from "~/__generated__/graphql";
+import { GET_ROOMS } from "~/api/apollo/querys";
 
 type MainChatProps = {
   tartarusProfile: TartarusProfile;
@@ -14,9 +16,11 @@ type MainChatProps = {
 
 function MainChat({ tartarusProfile, setFile }: MainChatProps) {
   const imageUploadRef = useRef<HTMLInputElement>(null);
+  const roomsQuery = useQuery(GET_ROOMS);
 
   const { displayName } = tartarusProfile;
 
+  console.log({ roomsQuery: roomsQuery.data as RoomsQuery });
   const handleFileInputClick = () => {
     if (imageUploadRef.current) imageUploadRef.current.click();
   };
