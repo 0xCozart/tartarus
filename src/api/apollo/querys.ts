@@ -42,4 +42,52 @@ const GET_ROOMS = gql(`
   }
 `);
 
-export { GET_ROOMS, GET_TARTARUS_PROFILE };
+const GET_VIEWER_ROOMS_W_MEMBERS_MESSAGES = gql(`
+  query ViewerRoomsWMembersMessages {
+    viewer {
+      roomList(first: 10) {
+        edges {
+          cursor
+          node {
+            createdAt
+            id
+            key
+            roomName
+            tartarusProfileId
+            members {
+              id
+              isViewer
+              messageList(first: 10) {
+                edges {
+                  node {
+                    createdAt
+                    id
+                    message
+                    roomId
+                  }
+                }
+              }
+            }
+            messages(first: 10) {
+              edges {
+                cursor
+                node {
+                  id
+                  createdAt
+                  message
+                  roomId
+                }
+              }
+            }
+          }
+        }
+        pageInfo {
+          startCursor
+        }
+      }
+      roomListCount
+    }
+  }
+`);
+
+export { GET_ROOMS, GET_TARTARUS_PROFILE, GET_VIEWER_ROOMS_W_MEMBERS_MESSAGES };
