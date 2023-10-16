@@ -151,7 +151,6 @@ type Room implements Node {
   members: [CeramicAccount]
   roomName: String!
   createdAt: DateTime!
-  tartarusProfileId: CeramicStreamID!
   messages(
     """Returns the items in the list that come after the specified cursor."""
     after: String
@@ -176,9 +175,6 @@ type Room implements Node {
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
 scalar DateTime
-
-"""A Ceramic Stream ID"""
-scalar CeramicStreamID @specifiedBy(url: "https://github.com/ceramicnetwork/CIP/blob/main/CIPs/CIP-59/CIP-59.md#streamid")
 
 """A connection to a list of items."""
 type MessageConnection {
@@ -207,6 +203,9 @@ type Message implements Node {
   room: Room
 }
 
+"""A Ceramic Stream ID"""
+scalar CeramicStreamID @specifiedBy(url: "https://github.com/ceramicnetwork/CIP/blob/main/CIPs/CIP-59/CIP-59.md#streamid")
+
 input MessageFiltersInput {
   where: MessageObjectFilterInput
   and: [MessageFiltersInput!]
@@ -215,6 +214,7 @@ input MessageFiltersInput {
 }
 
 input MessageObjectFilterInput {
+  roomId: StringValueFilterInput
   sender: StringValueFilterInput
   message: StringValueFilterInput
   createdAt: StringValueFilterInput
@@ -233,6 +233,7 @@ input StringValueFilterInput {
 }
 
 input MessageSortingInput {
+  roomId: SortOrder
   sender: SortOrder
   message: SortOrder
   createdAt: SortOrder
@@ -265,7 +266,7 @@ type TartarusProfile implements Node {
   friends: [CeramicAccount]
   createdAt: DateTime!
   displayName: String!
-  profilePicture: String!
+  profilePictureCid: String!
   rooms(
     """Returns the items in the list that come after the specified cursor."""
     after: String
@@ -313,10 +314,12 @@ input TartarusProfileFiltersInput {
 
 input TartarusProfileObjectFilterInput {
   createdAt: StringValueFilterInput
+  displayName: StringValueFilterInput
 }
 
 input TartarusProfileSortingInput {
   createdAt: SortOrder
+  displayName: SortOrder
 }
 
 type Mutation {
@@ -351,7 +354,6 @@ input RoomInput {
   members: [DID]
   roomName: String!
   createdAt: DateTime!
-  tartarusProfileId: CeramicStreamID!
 }
 
 """
@@ -384,7 +386,6 @@ input PartialRoomInput {
   members: [DID]
   roomName: String
   createdAt: DateTime
-  tartarusProfileId: CeramicStreamID
 }
 
 input UpdateOptionsInput {
@@ -474,7 +475,7 @@ input TartarusProfileInput {
   friends: [DID]
   createdAt: DateTime!
   displayName: String!
-  profilePicture: String!
+  profilePictureCid: String!
 }
 
 type UpdateTartarusProfilePayload {
@@ -501,5 +502,5 @@ input PartialTartarusProfileInput {
   friends: [DID]
   createdAt: DateTime
   displayName: String
-  profilePicture: String
+  profilePictureCid: String
 }
