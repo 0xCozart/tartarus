@@ -63,4 +63,30 @@ const CREATE_ROOM = gql(`
   }
 `);
 
-export { CREATE_ROOM, CREATE_TARTARUS_PROFILE, UPDATE_TARTARUS_PROFILE };
+const CREATE_MESSAGE = gql(`
+  mutation CreateMessage($content: CreateMessageInput!) {
+    createMessage(input: $content)
+     {
+      document {
+        createdAt
+        id
+        message
+        roomId
+        room {
+          createdAt
+          id
+          key
+          roomName
+          tartarusProfileId
+        }
+      }
+    }
+  }
+`);
+
+export {
+  CREATE_MESSAGE,
+  CREATE_ROOM,
+  CREATE_TARTARUS_PROFILE,
+  UPDATE_TARTARUS_PROFILE,
+};

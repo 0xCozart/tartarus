@@ -16,7 +16,10 @@ type MainChatProps = {
 
 function MainChat({ tartarusProfile, setFile }: MainChatProps) {
   const imageUploadRef = useRef<HTMLInputElement>(null);
+
   const roomsQuery = useQuery(GET_ROOMS);
+  const rooms = roomsQuery.data as RoomsQuery;
+  const { loading, error } = roomsQuery;
 
   const { displayName } = tartarusProfile;
 

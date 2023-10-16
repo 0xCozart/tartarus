@@ -3,6 +3,7 @@ import { gql } from "~/__generated__/gql";
 const GET_TARTARUS_PROFILE = gql(`
   query TartarusProfile {
     viewer {
+      id
       tartarusProfile {
         createdAt
         displayName
