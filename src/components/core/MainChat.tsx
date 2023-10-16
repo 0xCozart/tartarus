@@ -6,10 +6,7 @@ import {
   type Dispatch,
   type SetStateAction,
 } from "react";
-import {
-  type TartarusProfile,
-  type ViewerRoomsWMembersMessagesQuery,
-} from "~/__generated__/graphql";
+import { type TartarusProfile } from "~/__generated__/graphql";
 import { GET_VIEWER_ROOMS_W_MEMBERS_MESSAGES } from "~/api/apollo/querys";
 
 type MainChatProps = {
@@ -19,13 +16,11 @@ type MainChatProps = {
 
 function MainChat({ tartarusProfile, setFile }: MainChatProps) {
   const imageUploadRef = useRef<HTMLInputElement>(null);
+  const { displayName } = tartarusProfile;
 
   //
   const roomsQuery = useQuery(GET_VIEWER_ROOMS_W_MEMBERS_MESSAGES);
-  const { viewer, __typename } =
-    roomsQuery.data as ViewerRoomsWMembersMessagesQuery;
-
-  const { displayName } = tartarusProfile;
+  const { viewer } = roomsQuery.data ? roomsQuery.data : { viewer: null };
 
   console.log({ roomsQuery: viewer?.roomList?.edges });
 
@@ -101,15 +96,15 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
             {/* Room list start */}
             <div className="h-100 -mx-2 mt-4 flex flex-col space-y-1 overflow-y-auto">
               {/* eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing*/}
-              {rooms?.roomIndex?.edges || !loading ? (
-                rooms.roomIndex?.edges?.map((room) => (
+              {viewer?.roomList?.edges || !roomsQuery.loading ? (
+                viewer?.roomList?.edges?.map((room) => (
                   <button
                     className="flex flex-row items-center rounded-xl p-2 hover:bg-gray-100"
                     key={room?.node?.roomName}
                   >
                     {/* can turn this into a room image */}
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-200">
-                      H
+                      {room?.node?.roomName[0]?.toUpperCase()}
                     </div>
                     <div className="ml-2 text-sm font-semibold">
                       {room?.node?.roomName}
