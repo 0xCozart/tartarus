@@ -1,7 +1,10 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { type TartarusProfile } from "~/__generated__/graphql";
+import {
+  type TartarusProfile,
+  type TartarusProfileQuery,
+} from "~/__generated__/graphql";
 import { UPDATE_TARTARUS_PROFILE } from "~/api/apollo/mutations";
 import { GET_TARTARUS_PROFILE } from "~/api/apollo/querys";
 import PageWrapper from "~/components/PageWrapper";
@@ -17,10 +20,9 @@ export default function Home() {
   const router = useRouter();
 
   /* --------------------------<graphql>-------------------------------------------- */
-  const [
-    getProfile,
-    { loading: profileLoading, error: profileError, data: profileData },
-  ] = useLazyQuery(GET_TARTARUS_PROFILE);
+  const [getProfile, getProfileResults] = useLazyQuery(GET_TARTARUS_PROFILE);
+  const { loading, error } = getProfileResults;
+  const { viewer } = getProfileResults.data as TartarusProfileQuery;
 
   const [
     updateProfile,

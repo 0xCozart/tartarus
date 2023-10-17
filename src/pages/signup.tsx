@@ -5,7 +5,9 @@ import { CREATE_TARTARUS_PROFILE } from "~/api/apollo/mutations";
 import { SignUpTerminal } from "~/components/terminals";
 
 const SignUp = () => {
-  const [createProfile, { data }] = useMutation(CREATE_TARTARUS_PROFILE);
+  const [createProfile, results] = useMutation(CREATE_TARTARUS_PROFILE);
+  // const { data } = results as CreateTartarusProfileMutation;
+  // results.data?.createTartarusProfile?.viewer?.tartarusProfile?.displayName;
   const [mutationData, setMutationData] =
     useState<CreateTartarusProfileInput>();
 

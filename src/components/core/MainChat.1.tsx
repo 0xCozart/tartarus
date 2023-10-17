@@ -1,29 +1,16 @@
 import { useQuery } from "@apollo/client";
 import Image from "next/image";
-import {
-  useRef,
-  type ChangeEventHandler,
-  type Dispatch,
-  type SetStateAction,
-} from "react";
-import {
-  type TartarusProfile,
-  type ViewerRoomsWMembersMessagesQuery,
-} from "~/__generated__/graphql";
+import { useRef, type ChangeEventHandler } from "react";
 import { GET_VIEWER_ROOMS_W_MEMBERS_MESSAGES } from "~/api/apollo/querys";
+import { type MainChatProps } from "./MainChat";
 
-type MainChatProps = {
-  tartarusProfile: TartarusProfile;
-  setFile: Dispatch<SetStateAction<File | undefined>>;
-};
-
-function MainChat({ tartarusProfile, setFile }: MainChatProps) {
+export function MainChat({ tartarusProfile, setFile }: MainChatProps) {
   const imageUploadRef = useRef<HTMLInputElement>(null);
   const { displayName, profilePictureCid } = tartarusProfile;
 
   //
   const roomsQuery = useQuery(GET_VIEWER_ROOMS_W_MEMBERS_MESSAGES);
-  const { viewer } = roomsQuery.data as ViewerRoomsWMembersMessagesQuery;
+  const { viewer } = roomsQuery.data ? roomsQuery.data : { viewer: null };
 
   console.log({ roomsQuery: viewer?.roomList?.edges });
 
@@ -360,10 +347,7 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
             </div>
           </div>
         </div>
-        {/* Chat ends */}
       </div>
     </div>
   );
 }
-
-export default MainChat;
