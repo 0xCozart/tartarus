@@ -11,7 +11,7 @@ const GET_TARTARUS_PROFILE = gql(`
           id
         }
         id
-        profilePicture
+        profilePictureCid
         rooms (first: 10) {
           edges {
             node {
@@ -34,7 +34,6 @@ const GET_ROOMS = gql(`
           createdAt
           key
           roomName
-          tartarusProfileId
         }
       }
     }
@@ -53,7 +52,6 @@ const GET_VIEWER_ROOMS_W_MEMBERS_MESSAGES = gql(`
             id
             key
             roomName
-            tartarusProfileId
             members {
               id
               isViewer
