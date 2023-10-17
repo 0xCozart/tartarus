@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   type TartarusProfile,
   type TartarusProfileQuery,
+  type UpdateprofilePictureCidMutation,
 } from "~/__generated__/graphql";
 import { UPDATE_TARTARUS_PROFILE } from "~/api/apollo/mutations";
 import { GET_TARTARUS_PROFILE } from "~/api/apollo/querys";
@@ -21,18 +22,21 @@ export default function Home() {
 
   /* --------------------------<graphql>-------------------------------------------- */
   const [getProfile, getProfileResults] = useLazyQuery(GET_TARTARUS_PROFILE);
-  const { loading, error } = getProfileResults;
+  const { loading: profileLoading, error: profileError } = getProfileResults;
   const { viewer } = getProfileResults.data as TartarusProfileQuery;
 
-  const [
-    updateProfile,
-    { loading: updateProfileLoading, data: updateProfileData },
-  ] = useMutation(UPDATE_TARTARUS_PROFILE);
+  const [updateProfile, updateProfileResults] = useMutation(
+    UPDATE_TARTARUS_PROFILE
+  );
+  const { loading: profileMutationLoading, error: profileMutationError } =
+    updateProfileResults;
+  const { updateTartarusProfile: profileMutataionData } =
+    updateProfileResults.data as UpdateprofilePictureCidMutation;
   /* ------------------------------------------------------------------------------- */
 
   useEffect(() => {
-    if (!profileData) void getProfile();
-  }, [profileData, getProfile]);
+    if (!viewer?.tartarusProfile) void getProfile();
+  }, [viewer, getProfile]);
 
   useEffect(() => {
     const uploadFilePinata = async () => {
@@ -55,13 +59,17 @@ export default function Home() {
     if (file) {
       uploadFilePinata()
         .then((res) => {
-          if (res && profileData?.viewer?.tartarusProfile?.id) {
+          let resObj;
+          if (res) {
+            resObj = JSON.parse(res) as { cid: string };
+          }
+          if (resObj && viewer?.tartarusProfile?.id) {
             updateProfile({
               variables: {
                 content: {
-                  id: profileData?.viewer?.tartarusProfile?.id,
+                  id: viewer?.tartarusProfile?.id,
                   content: {
-                    profilePicture: res,
+                    profilePictureCid: resObj.cid,
                   },
                 },
               },
@@ -78,31 +86,29 @@ export default function Home() {
   }, [
     getProfile,
     file,
-    profileData?.viewer?.tartarusProfile?.id,
+    viewer?.tartarusProfile?.id,
     updateProfile,
-    profileData?.viewer?.tartarusProfile?.profilePicture,
+    viewer?.tartarusProfile?.profilePictureCid,
   ]);
 
-  if (profileData?.viewer?.tartarusProfile?.displayName) {
+  if (viewer?.tartarusProfile?.displayName) {
     return (
       <PageWrapper
-        displayName={profileData.viewer.tartarusProfile.displayName}
+        displayName={viewer.tartarusProfile.displayName}
         profilePictureUri={imageUriFromCid(
-          profileData.viewer.tartarusProfile.profilePicture
+          viewer.tartarusProfile.profilePictureCid
         )}
         setActiveTab={setActiveTab}
         // setActiveTab={setActiveTab}
       >
         {activeTab === "chat" && (
           <MainChat
-            tartarusProfile={
-              profileData.viewer.tartarusProfile as TartarusProfile
-            }
+            tartarusProfile={viewer.tartarusProfile as TartarusProfile}
             setFile={setFile}
           />
         )}
         {activeTab === "createRoom" && (
-          <RoomForm profileId={profileData.viewer.tartarusProfile.id} />
+          <RoomForm profileId={viewer.tartarusProfile.id} />
         )}
       </PageWrapper>
     );

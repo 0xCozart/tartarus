@@ -1,61 +1,95 @@
 type Query {
-  """Fetches objects given their IDs"""
+  """
+  Fetches objects given their IDs
+  """
   nodes(
-    """The IDs of objects"""
+    """
+    The IDs of objects
+    """
     ids: [ID!]!
   ): [Node]!
 
-  """Fetches an object given its ID"""
+  """
+  Fetches an object given its ID
+  """
   node(
-    """The ID of an object"""
+    """
+    The ID of an object
+    """
     id: ID!
   ): Node
 
-  """Account currently authenticated on the Ceramic instance, if set"""
+  """
+  Account currently authenticated on the Ceramic instance, if set
+  """
   viewer: CeramicAccount
   roomIndex(
-    """Returns the items in the list that come after the specified cursor."""
+    """
+    Returns the items in the list that come after the specified cursor.
+    """
     after: String
 
-    """Returns the first n items from the list."""
+    """
+    Returns the first n items from the list.
+    """
     first: Int
 
-    """Returns the items in the list that come before the specified cursor."""
+    """
+    Returns the items in the list that come before the specified cursor.
+    """
     before: String
 
-    """Returns the last n items from the list."""
+    """
+    Returns the last n items from the list.
+    """
     last: Int
     filters: RoomFiltersInput
     sorting: RoomSortingInput
   ): RoomConnection
   roomCount(filters: RoomFiltersInput): Int!
   messageIndex(
-    """Returns the items in the list that come after the specified cursor."""
+    """
+    Returns the items in the list that come after the specified cursor.
+    """
     after: String
 
-    """Returns the first n items from the list."""
+    """
+    Returns the first n items from the list.
+    """
     first: Int
 
-    """Returns the items in the list that come before the specified cursor."""
+    """
+    Returns the items in the list that come before the specified cursor.
+    """
     before: String
 
-    """Returns the last n items from the list."""
+    """
+    Returns the last n items from the list.
+    """
     last: Int
     filters: MessageFiltersInput
     sorting: MessageSortingInput
   ): MessageConnection
   messageCount(filters: MessageFiltersInput): Int!
   tartarusProfileIndex(
-    """Returns the items in the list that come after the specified cursor."""
+    """
+    Returns the items in the list that come after the specified cursor.
+    """
     after: String
 
-    """Returns the first n items from the list."""
+    """
+    Returns the first n items from the list.
+    """
     first: Int
 
-    """Returns the items in the list that come before the specified cursor."""
+    """
+    Returns the items in the list that come before the specified cursor.
+    """
     before: String
 
-    """Returns the last n items from the list."""
+    """
+    Returns the last n items from the list.
+    """
     last: Int
     filters: TartarusProfileFiltersInput
     sorting: TartarusProfileSortingInput
@@ -63,14 +97,20 @@ type Query {
   tartarusProfileCount(filters: TartarusProfileFiltersInput): Int!
 }
 
-"""An object with an ID"""
+"""
+An object with an ID
+"""
 interface Node {
-  """The id of the object."""
+  """
+  The id of the object.
+  """
   id: ID!
 }
 
 type CeramicAccount implements Node {
-  """Globally unique identifier of the account (DID string)"""
+  """
+  Globally unique identifier of the account (DID string)
+  """
   id: ID!
 
   """
@@ -78,32 +118,48 @@ type CeramicAccount implements Node {
   """
   isViewer: Boolean!
   roomList(
-    """Returns the items in the list that come after the specified cursor."""
+    """
+    Returns the items in the list that come after the specified cursor.
+    """
     after: String
 
-    """Returns the first n items from the list."""
+    """
+    Returns the first n items from the list.
+    """
     first: Int
 
-    """Returns the items in the list that come before the specified cursor."""
+    """
+    Returns the items in the list that come before the specified cursor.
+    """
     before: String
 
-    """Returns the last n items from the list."""
+    """
+    Returns the last n items from the list.
+    """
     last: Int
     filters: RoomFiltersInput
     sorting: RoomSortingInput
   ): RoomConnection
   roomListCount(filters: RoomFiltersInput): Int!
   messageList(
-    """Returns the items in the list that come after the specified cursor."""
+    """
+    Returns the items in the list that come after the specified cursor.
+    """
     after: String
 
-    """Returns the first n items from the list."""
+    """
+    Returns the first n items from the list.
+    """
     first: Int
 
-    """Returns the items in the list that come before the specified cursor."""
+    """
+    Returns the items in the list that come before the specified cursor.
+    """
     before: String
 
-    """Returns the last n items from the list."""
+    """
+    Returns the last n items from the list.
+    """
     last: Int
     filters: MessageFiltersInput
     sorting: MessageSortingInput
@@ -112,36 +168,58 @@ type CeramicAccount implements Node {
   tartarusProfile: TartarusProfile
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type RoomConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [RoomEdge]
 }
 
-"""Information about pagination in a connection."""
+"""
+Information about pagination in a connection.
+"""
 type PageInfo {
-  """When paginating forwards, are there more items?"""
+  """
+  When paginating forwards, are there more items?
+  """
   hasNextPage: Boolean!
 
-  """When paginating backwards, are there more items?"""
+  """
+  When paginating backwards, are there more items?
+  """
   hasPreviousPage: Boolean!
 
-  """When paginating backwards, the cursor to continue."""
+  """
+  When paginating backwards, the cursor to continue.
+  """
   startCursor: String
 
-  """When paginating forwards, the cursor to continue."""
+  """
+  When paginating forwards, the cursor to continue.
+  """
   endCursor: String
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type RoomEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Room
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
@@ -152,19 +230,29 @@ type Room implements Node {
   roomName: String!
   createdAt: DateTime!
   messages(
-    """Returns the items in the list that come after the specified cursor."""
+    """
+    Returns the items in the list that come after the specified cursor.
+    """
     after: String
 
-    """Returns the first n items from the list."""
+    """
+    Returns the first n items from the list.
+    """
     first: Int
 
-    """Returns the items in the list that come before the specified cursor."""
+    """
+    Returns the items in the list that come before the specified cursor.
+    """
     before: String
 
-    """Returns the last n items from the list."""
+    """
+    Returns the last n items from the list.
+    """
     last: Int
 
-    """Returns only documents created by the provided account"""
+    """
+    Returns only documents created by the provided account
+    """
     account: ID
     filters: MessageFiltersInput
     sorting: MessageSortingInput
@@ -176,21 +264,33 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type MessageConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [MessageEdge]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type MessageEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Message
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
@@ -203,8 +303,13 @@ type Message implements Node {
   room: Room
 }
 
-"""A Ceramic Stream ID"""
-scalar CeramicStreamID @specifiedBy(url: "https://github.com/ceramicnetwork/CIP/blob/main/CIPs/CIP-59/CIP-59.md#streamid")
+"""
+A Ceramic Stream ID
+"""
+scalar CeramicStreamID
+  @specifiedBy(
+    url: "https://github.com/ceramicnetwork/CIP/blob/main/CIPs/CIP-59/CIP-59.md#streamid"
+  )
 
 input MessageFiltersInput {
   where: MessageObjectFilterInput
@@ -268,40 +373,62 @@ type TartarusProfile implements Node {
   displayName: String!
   profilePictureCid: String!
   rooms(
-    """Returns the items in the list that come after the specified cursor."""
+    """
+    Returns the items in the list that come after the specified cursor.
+    """
     after: String
 
-    """Returns the first n items from the list."""
+    """
+    Returns the first n items from the list.
+    """
     first: Int
 
-    """Returns the items in the list that come before the specified cursor."""
+    """
+    Returns the items in the list that come before the specified cursor.
+    """
     before: String
 
-    """Returns the last n items from the list."""
+    """
+    Returns the last n items from the list.
+    """
     last: Int
 
-    """Returns only documents created by the provided account"""
+    """
+    Returns only documents created by the provided account
+    """
     account: ID
     filters: RoomFiltersInput
     sorting: RoomSortingInput
   ): RoomConnection!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type TartarusProfileConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [TartarusProfileEdge]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type TartarusProfileEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: TartarusProfile
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
@@ -327,18 +454,28 @@ type Mutation {
   updateRoom(input: UpdateRoomInput!): UpdateRoomPayload
   createMessage(input: CreateMessageInput!): CreateMessagePayload
   updateMessage(input: UpdateMessageInput!): UpdateMessagePayload
-  createTartarusProfile(input: CreateTartarusProfileInput!): CreateTartarusProfilePayload
-  updateTartarusProfile(input: UpdateTartarusProfileInput!): UpdateTartarusProfilePayload
+  createTartarusProfile(
+    input: CreateTartarusProfileInput!
+  ): CreateTartarusProfilePayload
+  updateTartarusProfile(
+    input: UpdateTartarusProfileInput!
+  ): UpdateTartarusProfilePayload
 }
 
 type CreateRoomPayload {
-  """Fetches an object given its ID"""
+  """
+  Fetches an object given its ID
+  """
   node(
-    """The ID of an object"""
+    """
+    The ID of an object
+    """
     id: ID!
   ): Node
 
-  """Account currently authenticated on the Ceramic instance, if set"""
+  """
+  Account currently authenticated on the Ceramic instance, if set
+  """
   viewer: CeramicAccount
   document: Room!
   clientMutationId: String
@@ -362,13 +499,19 @@ A field whose value conforms to the standard DID format as specified in did-core
 scalar DID @specifiedBy(url: "https://www.w3.org/TR/did-core/")
 
 type UpdateRoomPayload {
-  """Fetches an object given its ID"""
+  """
+  Fetches an object given its ID
+  """
   node(
-    """The ID of an object"""
+    """
+    The ID of an object
+    """
     id: ID!
   ): Node
 
-  """Account currently authenticated on the Ceramic instance, if set"""
+  """
+  Account currently authenticated on the Ceramic instance, if set
+  """
   viewer: CeramicAccount
   document: Room!
   clientMutationId: String
@@ -394,21 +537,34 @@ input UpdateOptionsInput {
   """
   replace: Boolean = false
 
-  """Only perform mutation if the document matches the provided version"""
+  """
+  Only perform mutation if the document matches the provided version
+  """
   version: CeramicCommitID
 }
 
-"""A Ceramic Commit ID"""
-scalar CeramicCommitID @specifiedBy(url: "https://github.com/ceramicnetwork/CIP/blob/main/CIPs/CIP-59/CIP-59.md#commitid")
+"""
+A Ceramic Commit ID
+"""
+scalar CeramicCommitID
+  @specifiedBy(
+    url: "https://github.com/ceramicnetwork/CIP/blob/main/CIPs/CIP-59/CIP-59.md#commitid"
+  )
 
 type CreateMessagePayload {
-  """Fetches an object given its ID"""
+  """
+  Fetches an object given its ID
+  """
   node(
-    """The ID of an object"""
+    """
+    The ID of an object
+    """
     id: ID!
   ): Node
 
-  """Account currently authenticated on the Ceramic instance, if set"""
+  """
+  Account currently authenticated on the Ceramic instance, if set
+  """
   viewer: CeramicAccount
   document: Message!
   clientMutationId: String
@@ -427,13 +583,19 @@ input MessageInput {
 }
 
 type UpdateMessagePayload {
-  """Fetches an object given its ID"""
+  """
+  Fetches an object given its ID
+  """
   node(
-    """The ID of an object"""
+    """
+    The ID of an object
+    """
     id: ID!
   ): Node
 
-  """Account currently authenticated on the Ceramic instance, if set"""
+  """
+  Account currently authenticated on the Ceramic instance, if set
+  """
   viewer: CeramicAccount
   document: Message!
   clientMutationId: String
@@ -454,13 +616,19 @@ input PartialMessageInput {
 }
 
 type CreateTartarusProfilePayload {
-  """Fetches an object given its ID"""
+  """
+  Fetches an object given its ID
+  """
   node(
-    """The ID of an object"""
+    """
+    The ID of an object
+    """
     id: ID!
   ): Node
 
-  """Account currently authenticated on the Ceramic instance, if set"""
+  """
+  Account currently authenticated on the Ceramic instance, if set
+  """
   viewer: CeramicAccount
   document: TartarusProfile!
   clientMutationId: String
@@ -479,13 +647,19 @@ input TartarusProfileInput {
 }
 
 type UpdateTartarusProfilePayload {
-  """Fetches an object given its ID"""
+  """
+  Fetches an object given its ID
+  """
   node(
-    """The ID of an object"""
+    """
+    The ID of an object
+    """
     id: ID!
   ): Node
 
-  """Account currently authenticated on the Ceramic instance, if set"""
+  """
+  Account currently authenticated on the Ceramic instance, if set
+  """
   viewer: CeramicAccount
   document: TartarusProfile!
   clientMutationId: String
