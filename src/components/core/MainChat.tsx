@@ -6,10 +6,7 @@ import {
   type Dispatch,
   type SetStateAction,
 } from "react";
-import {
-  type TartarusProfile,
-  type ViewerRoomsWMembersMessagesQuery,
-} from "~/__generated__/graphql";
+import { type TartarusProfile } from "~/__generated__/graphql";
 import { GET_VIEWER_ROOMS_W_MEMBERS_MESSAGES } from "~/api/apollo/querys";
 
 type MainChatProps = {
@@ -22,10 +19,11 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
   const { displayName, profilePictureCid } = tartarusProfile;
 
   //
-  const roomsQuery = useQuery(GET_VIEWER_ROOMS_W_MEMBERS_MESSAGES);
-  const { viewer } = roomsQuery.data as ViewerRoomsWMembersMessagesQuery;
-
-  console.log({ roomsQuery: viewer?.roomList?.edges });
+  const {
+    data: roomsQueryData,
+    loading: roomsQueryLoading,
+    error: roomsQueryError,
+  } = useQuery(GET_VIEWER_ROOMS_W_MEMBERS_MESSAGES);
 
   // this file upload should be turned into a hook or something idk (will be moved)
   const handleFileInputClick = () => {
@@ -99,8 +97,8 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
             {/* Room list start */}
             <div className="h-100 -mx-2 mt-4 flex flex-col space-y-1 overflow-y-auto">
               {/* eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing*/}
-              {viewer?.roomList?.edges || !roomsQuery.loading ? (
-                viewer?.roomList?.edges?.map((room) => (
+              {roomsQueryData?.viewer?.roomList?.edges || !roomsQueryLoading ? (
+                roomsQueryData?.viewer?.roomList?.edges?.map((room) => (
                   <button
                     className="flex flex-row items-center rounded-xl p-2 hover:bg-gray-100"
                     key={room?.node?.roomName}

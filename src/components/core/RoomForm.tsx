@@ -32,7 +32,7 @@ const RoomForm = ({ profileId }: RoomFormProps) => {
         key: formData.key,
         roomName: formData.roomName,
         createdAt: new Date().toISOString(), // Assuming current date-time
-        tartarusProfileId: profileId,
+        // memebers will be added
       };
 
       // not sure why there are two nested 'content'(s) here
