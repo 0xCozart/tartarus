@@ -8,6 +8,7 @@ import {
 } from "react";
 import { type TartarusProfile } from "~/__generated__/graphql";
 import { GET_VIEWER_ROOMS_W_MEMBERS_MESSAGES } from "~/api/apollo/querys";
+import { imageUriFromCid } from "~/utils";
 
 type MainChatProps = {
   tartarusProfile: TartarusProfile;
@@ -23,6 +24,7 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
     data: roomsQueryData,
     loading: roomsQueryLoading,
     error: roomsQueryError,
+    refetch: roomRefetch,
   } = useQuery(GET_VIEWER_ROOMS_W_MEMBERS_MESSAGES);
 
   // this file upload should be turned into a hook or something idk (will be moved)
@@ -65,13 +67,13 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
           </div>
           {/* Profile card starts (might make this a seperate component) */}
           <div className="mt-4 flex w-full flex-col items-center rounded-lg border border-gray-200 bg-indigo-100 px-4 py-6">
-            <div className="h-20 w-20 overflow-hidden rounded-full border">
+            <div className="relative h-20 w-20 overflow-hidden rounded-full border">
               <Image
-                width={10}
-                height={10}
-                src=""
+                src={imageUriFromCid(profilePictureCid)}
                 alt="Avatar"
-                className="h-full w-full"
+                layout="fill" // This ensures the image will take up the entire container space
+                objectFit="cover" // This makes sure the image will cover the entire space of the container
+                objectPosition="center" // This centers the image in its frame
               />
             </div>
             <div className="mt-2 text-sm font-semibold">Aminos Co.</div>

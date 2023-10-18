@@ -29,14 +29,21 @@ export default function Home() {
   );
   /* ------------------------------------------------------------------------------- */
 
+  /**
+   * puses to signup page via router if tartarusProfile == null
+   */
   useEffect(() => {
-    if (!profileLoading && !profileData?.viewer?.tartarusProfile?.displayName) {
+    if (!profileLoading && !profileData?.viewer?.tartarusProfile) {
       void router.push("/signup");
     }
 
     console.log({ profileData });
   }, [profileData, profileLoading, router]);
 
+  /**
+   * handles pinata image upload
+   * (will be moved to a custom hook)
+   */
   useEffect(() => {
     const uploadFilePinata = async () => {
       if (file) {
