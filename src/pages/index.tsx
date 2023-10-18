@@ -1,12 +1,8 @@
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import {
-  type TartarusProfile,
-  type TartarusProfileQuery,
-  type UpdateprofilePictureCidMutation,
-} from "~/__generated__/graphql";
-import { UPDATE_TARTARUS_PROFILE } from "~/api/apollo/mutations";
+import { type TartarusProfile } from "~/__generated__/graphql";
+import { UPDATE_TARTARUS_PROFILE_DISPLAY_NAME } from "~/api/apollo/mutations";
 import { GET_TARTARUS_PROFILE } from "~/api/apollo/querys";
 import PageWrapper from "~/components/PageWrapper";
 import MainChat from "~/components/core/MainChat";
@@ -20,23 +16,26 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<ActiveTabRoutes>("chat");
   const router = useRouter();
 
-  /* --------------------------<graphql>-------------------------------------------- */
-  const [getProfile, getProfileResults] = useLazyQuery(GET_TARTARUS_PROFILE);
-  const { loading: profileLoading, error: profileError } = getProfileResults;
-  const { viewer } = getProfileResults.data as TartarusProfileQuery;
+  /* ---------------------------------<graphql>------------------------------------- */
+  const {
+    data: profileData,
+    loading: profileLoading,
+    error: profileError,
+    refetch: refetchProfile,
+  } = useQuery(GET_TARTARUS_PROFILE);
 
-  const [updateProfile, updateProfileResults] = useMutation(
-    UPDATE_TARTARUS_PROFILE
+  const [updateProfile, { data: updateProfileData }] = useMutation(
+    UPDATE_TARTARUS_PROFILE_DISPLAY_NAME
   );
-  const { loading: profileMutationLoading, error: profileMutationError } =
-    updateProfileResults;
-  const { updateTartarusProfile: profileMutataionData } =
-    updateProfileResults.data as UpdateprofilePictureCidMutation;
   /* ------------------------------------------------------------------------------- */
 
   useEffect(() => {
-    if (!viewer?.tartarusProfile) void getProfile();
-  }, [viewer, getProfile]);
+    if (!profileLoading && !profileData?.viewer?.tartarusProfile?.displayName) {
+      void router.push("/signup");
+    }
+
+    console.log({ profileData });
+  }, [profileData, profileLoading, router]);
 
   useEffect(() => {
     const uploadFilePinata = async () => {
@@ -63,11 +62,11 @@ export default function Home() {
           if (res) {
             resObj = JSON.parse(res) as { cid: string };
           }
-          if (resObj && viewer?.tartarusProfile?.id) {
+          if (resObj && profileData?.viewer?.tartarusProfile?.id) {
             updateProfile({
               variables: {
                 content: {
-                  id: viewer?.tartarusProfile?.id,
+                  id: profileData?.viewer?.tartarusProfile?.id,
                   content: {
                     profilePictureCid: resObj.cid,
                   },
@@ -75,7 +74,7 @@ export default function Home() {
               },
             })
               .then((res) => {
-                void getProfile();
+                void refetchProfile();
                 setFile(undefined);
               })
               .catch(console.error);
@@ -84,31 +83,33 @@ export default function Home() {
         .catch(console.error);
     }
   }, [
-    getProfile,
+    refetchProfile,
     file,
-    viewer?.tartarusProfile?.id,
+    profileData?.viewer?.tartarusProfile?.id,
     updateProfile,
-    viewer?.tartarusProfile?.profilePictureCid,
+    profileData?.viewer?.tartarusProfile?.profilePictureCid,
   ]);
 
-  if (viewer?.tartarusProfile?.displayName) {
+  if (!profileLoading && profileData?.viewer?.tartarusProfile?.displayName) {
     return (
       <PageWrapper
-        displayName={viewer.tartarusProfile.displayName}
+        displayName={profileData?.viewer.tartarusProfile.displayName}
         profilePictureUri={imageUriFromCid(
-          viewer.tartarusProfile.profilePictureCid
+          profileData.viewer.tartarusProfile.profilePictureCid
         )}
         setActiveTab={setActiveTab}
         // setActiveTab={setActiveTab}
       >
         {activeTab === "chat" && (
           <MainChat
-            tartarusProfile={viewer.tartarusProfile as TartarusProfile}
+            tartarusProfile={
+              profileData?.viewer.tartarusProfile as TartarusProfile
+            }
             setFile={setFile}
           />
         )}
         {activeTab === "createRoom" && (
-          <RoomForm profileId={viewer.tartarusProfile.id} />
+          <RoomForm profileId={profileData?.viewer.tartarusProfile.id} />
         )}
       </PageWrapper>
     );

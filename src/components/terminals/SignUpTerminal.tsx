@@ -18,7 +18,7 @@ const SignUpTerminal = ({
           content: {
             displayName: username,
             createdAt: new Date().toISOString(),
-            profilePicture: "test URI",
+            profilePictureCid: "cid...",
           },
         });
       },

@@ -20,7 +20,7 @@ const CREATE_TARTARUS_PROFILE = gql(`
   }
 `);
 
-const UPDATE_TARTARUS_PROFILE = gql(`
+const UPDATE_TARTARUS_PROFILE_DISPLAY_NAME = gql(`
   mutation UpdateprofilePictureCid($content: UpdateTartarusProfileInput!) {
     updateTartarusProfile(input: $content) {
       clientMutationId
@@ -28,9 +28,9 @@ const UPDATE_TARTARUS_PROFILE = gql(`
         id
         isViewer
         tartarusProfile {
+          id
           createdAt
           displayName
-          id
           profilePictureCid
         }
       }
@@ -86,5 +86,5 @@ export {
   CREATE_MESSAGE,
   CREATE_ROOM,
   CREATE_TARTARUS_PROFILE,
-  UPDATE_TARTARUS_PROFILE,
+  UPDATE_TARTARUS_PROFILE_DISPLAY_NAME,
 };

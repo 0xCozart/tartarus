@@ -48,8 +48,8 @@ const GET_VIEWER_ROOMS_W_MEMBERS_MESSAGES = gql(`
         edges {
           cursor
           node {
-            createdAt
             id
+            createdAt
             key
             roomName
             members {
@@ -58,8 +58,8 @@ const GET_VIEWER_ROOMS_W_MEMBERS_MESSAGES = gql(`
               messageList(first: 10) {
                 edges {
                   node {
-                    createdAt
                     id
+                    createdAt
                     message
                     roomId
                   }
