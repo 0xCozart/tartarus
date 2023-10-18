@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@apollo/client";
 import Image from "next/image";
 import {
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -21,8 +22,9 @@ type MainChatProps = {
 function MainChat({ tartarusProfile, setFile }: MainChatProps) {
   const imageUploadRef = useRef<HTMLInputElement>(null);
   const [roomId, setRoomId] = useState<string>();
+  const [message, setMessage] = useState<string>();
 
-  const { displayName, profilePictureCid, id } = tartarusProfile;
+  const { displayName, profilePictureCid } = tartarusProfile;
   /* ---------------------------------<graphql>------------------------------------- */
   const {
     data: roomsQueryData,
@@ -51,6 +53,13 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
   ] = useMutation(CREATE_MESSAGE);
   /* ------------------------------------------------------------------------------- */
 
+  useEffect(() => {
+    if (roomsQueryData?.viewer?.roomList) {
+      setRoomId(roomsQueryData.viewer.roomList.edges?.at(0)?.node?.id);
+    }
+    console.log({ message, messageData, messageError });
+  }, [message, messageData, messageError, roomsQueryData]);
+
   // this file upload should be turned into a hook or something idk (will be moved)
   const handleFileInputClick = () => {
     if (imageUploadRef.current) imageUploadRef.current.click();
@@ -66,17 +75,21 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
   };
 
   const handleMessageSend = () => {
-    void messageMutation({
-      variables: {
-        content: {
+    console.log({ message });
+    if (message) {
+      void messageMutation({
+        variables: {
           content: {
-            createdAt: new Date().toISOString(),
-            roomId,
-            sender: tartarusProfile.id,
+            content: {
+              createdAt: new Date().toISOString(),
+              roomId,
+              senderId: tartarusProfile.id,
+              message,
+            },
           },
         },
-      },
-    });
+      });
+    }
   };
   return (
     <div className="mb-0 flex text-gray-800 antialiased">
@@ -204,21 +217,38 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
                   {/*message*/}
                   {messageList
                     ? messageList.map((message) => {
-                        if(message?.node.){
-
-                        return (<div
-                          className="col-start-1 col-end-8 rounded-lg p-3"
-                          key={message?.node?.id}
-                        >
-                          <div className="flex flex-row items-center">
-                            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
-                              A
+                        if (message?.node?.sender?.id == tartarusProfile.id) {
+                          return (
+                            <div
+                              className="col-start-6 col-end-13 rounded-lg p-3"
+                              key={message?.node?.id}
+                            >
+                              <div className="flex flex-row items-center">
+                                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
+                                  {message.node.sender.displayName[0]}
+                                </div>
+                                <div className="relative ml-3 rounded-xl bg-white px-4 py-2 text-sm shadow">
+                                  <div>{message?.node?.message}</div>
+                                </div>
+                              </div>
                             </div>
-                            <div className="relative ml-3 rounded-xl bg-white px-4 py-2 text-sm shadow">
-                              <div>{message?.node?.message}</div>
+                          );
+                        } else if (message?.node?.sender) {
+                          return (
+                            <div
+                              className="col-start-1 col-end-8 rounded-lg p-3"
+                              key={message?.node?.id}
+                            >
+                              <div className="flex flex-row items-center">
+                                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
+                                  {message.node.sender.displayName[0]}
+                                </div>
+                                <div className="relative ml-3 rounded-xl bg-white px-4 py-2 text-sm shadow">
+                                  <div>{message?.node?.message}</div>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>)
+                          );
                         }
                       })
                     : null}
@@ -296,10 +326,7 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
                     className="flex h-10 w-full rounded-xl border pl-4 focus:border-indigo-300 focus:outline-none"
                     onChange={(e) => setMessage(e.target.value)}
                   />
-                  <button
-                    className="absolute right-0 top-0 flex h-full w-12 items-center justify-center text-gray-400 hover:text-gray-600"
-                    onClick={handleMessageSend}
-                  >
+                  <button className="absolute right-0 top-0 flex h-full w-12 items-center justify-center text-gray-400 hover:text-gray-600">
                     <svg
                       className="h-6 w-6"
                       fill="none"
@@ -318,7 +345,10 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
                 </div>
               </div>
               <div className="ml-4">
-                <button className="flex flex-shrink-0 items-center justify-center rounded-xl bg-indigo-500 px-4 py-1 text-white hover:bg-indigo-600">
+                <button
+                  onClick={() => handleMessageSend()}
+                  className="flex flex-shrink-0 items-center justify-center rounded-xl bg-indigo-500 px-4 py-1 text-white hover:bg-indigo-600"
+                >
                   <span>Send</span>
                   <span className="ml-2">
                     <svg
