@@ -1,13 +1,16 @@
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import Image from "next/image";
 import {
+  useMemo,
   useRef,
+  useState,
   type ChangeEventHandler,
   type Dispatch,
   type SetStateAction,
 } from "react";
 import { type TartarusProfile } from "~/__generated__/graphql";
-import { GET_VIEWER_ROOMS_W_MEMBERS_MESSAGES } from "~/api/apollo/querys";
+import { CREATE_MESSAGE } from "~/api/apollo/mutations";
+import { GET_VIEWER_ROOMS_W_MEMBERS_MESSAGES } from "~/api/apollo/queries";
 import { imageUriFromCid } from "~/utils";
 
 type MainChatProps = {
@@ -17,15 +20,36 @@ type MainChatProps = {
 
 function MainChat({ tartarusProfile, setFile }: MainChatProps) {
   const imageUploadRef = useRef<HTMLInputElement>(null);
-  const { displayName, profilePictureCid } = tartarusProfile;
+  const [roomId, setRoomId] = useState<string>();
 
-  //
+  const { displayName, profilePictureCid, id } = tartarusProfile;
+  /* ---------------------------------<graphql>------------------------------------- */
   const {
     data: roomsQueryData,
     loading: roomsQueryLoading,
     error: roomsQueryError,
     refetch: roomRefetch,
   } = useQuery(GET_VIEWER_ROOMS_W_MEMBERS_MESSAGES);
+
+  const messageList = useMemo(() => {
+    if (roomsQueryData?.viewer?.roomList?.edges) {
+      const currentRoom = roomsQueryData.viewer.roomList.edges.filter(
+        (room) => room?.node?.id == roomId
+      );
+
+      if (currentRoom[0]?.node?.messages.edges) {
+        return currentRoom[0]?.node?.messages.edges;
+      } else {
+        return null;
+      }
+    }
+  }, [roomsQueryData?.viewer?.roomList, roomId]);
+
+  const [
+    messageMutation,
+    { data: messageData, loading: messageLoading, error: messageError },
+  ] = useMutation(CREATE_MESSAGE);
+  /* ------------------------------------------------------------------------------- */
 
   // this file upload should be turned into a hook or something idk (will be moved)
   const handleFileInputClick = () => {
@@ -41,6 +65,19 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
     }
   };
 
+  const handleMessageSend = () => {
+    void messageMutation({
+      variables: {
+        content: {
+          content: {
+            createdAt: new Date().toISOString(),
+            roomId,
+            sender: tartarusProfile.id,
+          },
+        },
+      },
+    });
+  };
   return (
     <div className="mb-0 flex text-gray-800 antialiased">
       <div className="flex h-full w-full flex-row overflow-x-hidden">
@@ -104,6 +141,7 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
                   <button
                     className="flex flex-row items-center rounded-xl p-2 hover:bg-gray-100"
                     key={room?.node?.roomName}
+                    onClick={() => setRoomId(room?.node?.id)}
                   >
                     {/* can turn this into a room image */}
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-200">
@@ -163,91 +201,30 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
             <div className="mb-4 flex h-full flex-col overflow-x-auto">
               <div className="flex h-full flex-col">
                 <div className="grid grid-cols-12 gap-y-2">
-                  <div className="col-start-1 col-end-8 rounded-lg p-3">
-                    <div className="flex flex-row items-center">
-                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
-                        A
-                      </div>
-                      <div className="relative ml-3 rounded-xl bg-white px-4 py-2 text-sm shadow">
-                        <div>Hey How are you today?</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-start-1 col-end-8 rounded-lg p-3">
-                    <div className="flex flex-row items-center">
-                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
-                        A
-                      </div>
-                      <div className="relative ml-3 rounded-xl bg-white px-4 py-2 text-sm shadow">
-                        <div>
-                          Lorem ipsum dolor sit amet, consectetur adipisicing
-                          elit. Vel ipsa commodi illum saepe numquam maxime
-                          asperiores voluptate sit, minima perspiciatis.
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-start-6 col-end-13 rounded-lg p-3">
-                    <div className="flex flex-row-reverse items-center justify-start">
-                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
-                        A
-                      </div>
-                      <div className="relative mr-3 rounded-xl bg-indigo-100 px-4 py-2 text-sm shadow">
-                        <div>Im ok what about you?</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-start-6 col-end-13 rounded-lg p-3">
-                    <div className="flex flex-row-reverse items-center justify-start">
-                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
-                        A
-                      </div>
-                      <div className="relative mr-3 rounded-xl bg-indigo-100 px-4 py-2 text-sm shadow">
-                        <div>
-                          Lorem ipsum dolor sit, amet consectetur adipisicing. ?
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-start-1 col-end-8 rounded-lg p-3">
-                    <div className="flex flex-row items-center">
-                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
-                        A
-                      </div>
-                      <div className="relative ml-3 rounded-xl bg-white px-4 py-2 text-sm shadow">
-                        <div>Lorem ipsum dolor sit amet !</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-start-6 col-end-13 rounded-lg p-3">
-                    <div className="flex flex-row-reverse items-center justify-start">
-                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
-                        A
-                      </div>
-                      <div className="relative mr-3 rounded-xl bg-indigo-100 px-4 py-2 text-sm shadow">
-                        <div>
-                          Lorem ipsum dolor sit, amet consectetur adipisicing. ?
-                        </div>
-                        <div className="absolute bottom-0 right-0 -mb-5 mr-2 text-xs text-gray-500">
-                          Seen
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-start-1 col-end-8 rounded-lg p-3">
-                    <div className="flex flex-row items-center">
-                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
-                        A
-                      </div>
-                      <div className="relative ml-3 rounded-xl bg-white px-4 py-2 text-sm shadow">
-                        <div>
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Perspiciatis, in.
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-start-1 col-end-8 rounded-lg p-3">
+                  {/*message*/}
+                  {messageList
+                    ? messageList.map((message) => {
+                        if(message?.node.){
+
+                        return (<div
+                          className="col-start-1 col-end-8 rounded-lg p-3"
+                          key={message?.node?.id}
+                        >
+                          <div className="flex flex-row items-center">
+                            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
+                              A
+                            </div>
+                            <div className="relative ml-3 rounded-xl bg-white px-4 py-2 text-sm shadow">
+                              <div>{message?.node?.message}</div>
+                            </div>
+                          </div>
+                        </div>)
+                        }
+                      })
+                    : null}
+                  {/* message ends */}
+
+                  {/* <div className="col-start-1 col-end-8 rounded-lg p-3">
                     <div className="flex flex-row items-center">
                       <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
                         A
@@ -279,7 +256,7 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
@@ -317,8 +294,12 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
                   <input
                     type="text"
                     className="flex h-10 w-full rounded-xl border pl-4 focus:border-indigo-300 focus:outline-none"
+                    onChange={(e) => setMessage(e.target.value)}
                   />
-                  <button className="absolute right-0 top-0 flex h-full w-12 items-center justify-center text-gray-400 hover:text-gray-600">
+                  <button
+                    className="absolute right-0 top-0 flex h-full w-12 items-center justify-center text-gray-400 hover:text-gray-600"
+                    onClick={handleMessageSend}
+                  >
                     <svg
                       className="h-6 w-6"
                       fill="none"

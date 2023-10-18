@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { type TartarusProfile } from "~/__generated__/graphql";
 import { UPDATE_TARTARUS_PROFILE_DISPLAY_NAME } from "~/api/apollo/mutations";
-import { GET_TARTARUS_PROFILE } from "~/api/apollo/querys";
+import { GET_TARTARUS_PROFILE } from "~/api/apollo/queries";
 import PageWrapper from "~/components/PageWrapper";
 import MainChat from "~/components/core/MainChat";
 import RoomForm from "~/components/core/RoomForm";

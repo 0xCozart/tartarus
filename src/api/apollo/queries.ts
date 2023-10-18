@@ -5,13 +5,13 @@ const GET_TARTARUS_PROFILE = gql(`
     viewer {
       id
       tartarusProfile {
+        id
         createdAt
         displayName
+        profilePictureCid
         friends {
           id
         }
-        id
-        profilePictureCid
         rooms (first: 10) {
           edges {
             node {
@@ -74,6 +74,12 @@ const GET_VIEWER_ROOMS_W_MEMBERS_MESSAGES = gql(`
                   createdAt
                   message
                   roomId
+                  sender {
+                    id
+                    createdAt
+                    displayName
+                    profilePictureCid
+                  }
                 }
               }
             }
