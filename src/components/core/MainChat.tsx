@@ -50,7 +50,9 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
   const [
     messageMutation,
     { data: messageData, loading: messageLoading, error: messageError },
-  ] = useMutation(CREATE_MESSAGE);
+  ] = useMutation(CREATE_MESSAGE, {
+    refetchQueries: [GET_VIEWER_ROOMS_W_MEMBERS_MESSAGES],
+  });
   /* ------------------------------------------------------------------------------- */
 
   useEffect(() => {
@@ -225,7 +227,7 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
                           >
                             <div className="flex flex-row items-center">
                               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
-                                {message.node.sender.displayName[0]}
+                                {message.node.sender.displayName[0]?.toUpperCase()}
                               </div>
                               <div className="relative ml-3 max-w-xs break-words rounded-xl bg-white px-4 py-2  text-sm shadow">
                                 <div>{message?.node?.message}</div>
@@ -241,7 +243,7 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
                           >
                             <div className="flex flex-row items-center">
                               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
-                                {message.node.sender.displayName[0]}
+                                {message.node.sender.displayName[0]?.toUpperCase()}
                               </div>
                               <div className="relative ml-3 rounded-xl bg-white px-4 py-2 text-sm shadow">
                                 <div>{message?.node?.message}</div>
