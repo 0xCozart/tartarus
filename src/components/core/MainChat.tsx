@@ -54,11 +54,11 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
   /* ------------------------------------------------------------------------------- */
 
   useEffect(() => {
-    if (roomsQueryData?.viewer?.roomList) {
+    if (!roomId && roomsQueryData?.viewer?.roomList) {
       setRoomId(roomsQueryData.viewer.roomList.edges?.at(0)?.node?.id);
     }
     console.log({ message, messageData, messageError });
-  }, [message, messageData, messageError, roomsQueryData]);
+  }, [message, messageData, messageError, roomsQueryData, roomId]);
 
   // this file upload should be turned into a hook or something idk (will be moved)
   const handleFileInputClick = () => {
@@ -211,50 +211,50 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
         {/* Chat starts */}
         <div className="flex h-full flex-auto flex-col p-6">
           <div className="flex h-full flex-auto flex-shrink-0 flex-col rounded-2xl bg-gray-100 p-4">
-            <div className="mb-4 flex h-full flex-col overflow-x-auto">
-              <div className="flex h-full flex-col">
-                <div className="grid grid-cols-12 gap-y-2">
-                  {/*message*/}
-                  {messageList
-                    ? messageList.map((message) => {
-                        if (message?.node?.sender?.id == tartarusProfile.id) {
-                          return (
-                            <div
-                              className="col-start-6 col-end-13 rounded-lg p-3"
-                              key={message?.node?.id}
-                            >
-                              <div className="flex flex-row items-center">
-                                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
-                                  {message.node.sender.displayName[0]}
-                                </div>
-                                <div className="relative ml-3 rounded-xl bg-white px-4 py-2 text-sm shadow">
-                                  <div>{message?.node?.message}</div>
-                                </div>
+            <div className="mb-4 flex h-full w-full flex-col overflow-y-auto">
+              {/* <div className="flex h-full flex-col"> */}
+              <div className="grid grid-cols-12 gap-y-2">
+                {/*message*/}
+                {messageList
+                  ? messageList.map((message) => {
+                      if (message?.node?.sender?.id == tartarusProfile.id) {
+                        return (
+                          <div
+                            className="col-start-6 col-end-13 rounded-lg p-3"
+                            key={message?.node?.id}
+                          >
+                            <div className="flex flex-row items-center">
+                              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
+                                {message.node.sender.displayName[0]}
+                              </div>
+                              <div className="relative ml-3 max-w-xs break-words rounded-xl bg-white px-4 py-2  text-sm shadow">
+                                <div>{message?.node?.message}</div>
                               </div>
                             </div>
-                          );
-                        } else if (message?.node?.sender) {
-                          return (
-                            <div
-                              className="col-start-1 col-end-8 rounded-lg p-3"
-                              key={message?.node?.id}
-                            >
-                              <div className="flex flex-row items-center">
-                                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
-                                  {message.node.sender.displayName[0]}
-                                </div>
-                                <div className="relative ml-3 rounded-xl bg-white px-4 py-2 text-sm shadow">
-                                  <div>{message?.node?.message}</div>
-                                </div>
+                          </div>
+                        );
+                      } else if (message?.node?.sender) {
+                        return (
+                          <div
+                            className="col-start-1 col-end-8 rounded-lg p-3"
+                            key={message?.node?.id}
+                          >
+                            <div className="flex flex-row items-center">
+                              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
+                                {message.node.sender.displayName[0]}
+                              </div>
+                              <div className="relative ml-3 rounded-xl bg-white px-4 py-2 text-sm shadow">
+                                <div>{message?.node?.message}</div>
                               </div>
                             </div>
-                          );
-                        }
-                      })
-                    : null}
-                  {/* message ends */}
+                          </div>
+                        );
+                      }
+                    })
+                  : null}
+                {/* message ends */}
 
-                  {/* <div className="col-start-1 col-end-8 rounded-lg p-3">
+                {/* <div className="col-start-1 col-end-8 rounded-lg p-3">
                     <div className="flex flex-row items-center">
                       <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500">
                         A
@@ -287,8 +287,8 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
                       </div>
                     </div>
                   </div> */}
-                </div>
               </div>
+              {/* </div> */}
             </div>
             <div className="flex h-16 w-full flex-row items-center rounded-xl bg-white px-4">
               <div>
