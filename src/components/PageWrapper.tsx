@@ -41,7 +41,7 @@ const PageWrapper = ({
               d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
             ></path>
           </svg>
-        </div>
+++        </div>
         <div
           className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg hover:bg-white hover:text-gray-800  hover:duration-300 hover:ease-linear focus:bg-white"
           onClick={(event) => {

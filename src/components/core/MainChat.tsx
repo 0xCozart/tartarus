@@ -91,6 +91,7 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
           },
         },
       });
+      setMessage("");
     }
   };
   return (
@@ -326,6 +327,7 @@ function MainChat({ tartarusProfile, setFile }: MainChatProps) {
                   <input
                     type="text"
                     className="flex h-10 w-full rounded-xl border pl-4 focus:border-indigo-300 focus:outline-none"
+                    value={message}
                     onChange={(e) => setMessage(e.target.value)}
                   />
                   <button className="absolute right-0 top-0 flex h-full w-12 items-center justify-center text-gray-400 hover:text-gray-600">
