@@ -10,7 +10,7 @@ const CREATE_TARTARUS_PROFILE = gql(`
           createdAt
           displayName
           id
-          profilePicture
+          profilePictureCid
           friends {
             id
           }
@@ -31,7 +31,7 @@ const UPDATE_TARTARUS_PROFILE = gql(`
           createdAt
           displayName
           id
-          profilePicture
+          profilePictureCid
         }
       }
     }

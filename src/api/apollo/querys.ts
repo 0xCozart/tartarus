@@ -10,7 +10,7 @@ const GET_TARTARUS_PROFILE = gql(`
           id
         }
         id
-        profilePicture
+        profilePictureCid
         rooms (first: 10) {
           edges {
             node {
