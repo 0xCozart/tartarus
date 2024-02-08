@@ -4,16 +4,28 @@ import { type RuntimeCompositeDefinition } from "@composedb/types/dist";
 export const definition: RuntimeCompositeDefinition = {
   models: {
     Room: {
-      id: "kjzl6hvfrbw6c7hj1ixkcvz9tef4kcwyvj3m72vuydal3dhq39jcu48r5dhmybv",
-      accountRelation: { type: "list" },
-    },
-    Message: {
-      id: "kjzl6hvfrbw6ca9qciixrm7e69vg8m5w107girgllhvae4a0uabmlofes75s8tm",
+      interface: false,
+      implements: [],
+      id: "kjzl6hvfrbw6cah3f8dtbnge3b38xss2g5twhjtvi5zovfn51fvuhomxyhp1770",
       accountRelation: { type: "list" },
     },
     TartarusProfile: {
-      id: "kjzl6hvfrbw6c5azxqedlgqluxyg8aev9aktfem5li3kcwdkpff3pna35ithd3u",
+      interface: false,
+      implements: [],
+      id: "kjzl6hvfrbw6c9pdj2lt4zen2gx33ztcwyhvu6ygb3x6537867blkez0fi8a4nc",
       accountRelation: { type: "single" },
+    },
+    Message: {
+      interface: false,
+      implements: [],
+      id: "kjzl6hvfrbw6c9qzu96sd94o3yekw6fe6v9zr6mof7cieesmdyih16sbxpu9qsr",
+      accountRelation: { type: "list" },
+    },
+    PublicEncryptionDID: {
+      interface: false,
+      implements: [],
+      id: "kjzl6hvfrbw6ca1t6q39ympc7qoij1m9kb5ckn3ribr7qqhi7a03axr3ptlqmuh",
+      accountRelation: { type: "list" },
     },
   },
   objects: {
@@ -23,34 +35,16 @@ export const definition: RuntimeCompositeDefinition = {
         type: "list",
         required: false,
         item: { type: "did", required: false },
-        indexed: true,
       },
-      roomName: { type: "string", required: true, indexed: true },
-      createdAt: { type: "datetime", required: true, indexed: true },
-      tartarusProfileId: { type: "streamid", required: true },
+      roomName: { type: "string", required: true },
+      createdAt: { type: "datetime", required: true },
       messages: {
         type: "view",
         viewType: "relation",
         relation: {
           source: "queryConnection",
           model:
-            "kjzl6hvfrbw6ca9qciixrm7e69vg8m5w107girgllhvae4a0uabmlofes75s8tm",
-          property: "roomId",
-        },
-      },
-    },
-    Message: {
-      roomId: { type: "streamid", required: true },
-      sender: { type: "did", required: true, indexed: true },
-      message: { type: "string", required: false, indexed: true },
-      createdAt: { type: "datetime", required: true, indexed: true },
-      room: {
-        type: "view",
-        viewType: "relation",
-        relation: {
-          source: "document",
-          model:
-            "kjzl6hvfrbw6c7hj1ixkcvz9tef4kcwyvj3m72vuydal3dhq39jcu48r5dhmybv",
+            "kjzl6hvfrbw6c9qzu96sd94o3yekw6fe6v9zr6mof7cieesmdyih16sbxpu9qsr",
           property: "roomId",
         },
       },
@@ -60,27 +54,61 @@ export const definition: RuntimeCompositeDefinition = {
         type: "list",
         required: false,
         item: { type: "did", required: false },
-        indexed: true,
       },
-      createdAt: { type: "datetime", required: true, indexed: true },
+      createdAt: { type: "datetime", required: true },
       displayName: { type: "string", required: true },
-      profilePicture: { type: "string", required: true },
+      profilePictureCid: { type: "string", required: true },
       rooms: {
         type: "view",
         viewType: "relation",
         relation: {
           source: "queryConnection",
           model:
-            "kjzl6hvfrbw6c7hj1ixkcvz9tef4kcwyvj3m72vuydal3dhq39jcu48r5dhmybv",
+            "kjzl6hvfrbw6cah3f8dtbnge3b38xss2g5twhjtvi5zovfn51fvuhomxyhp1770",
           property: "TartarusProfileId",
         },
       },
+    },
+    Message: {
+      roomId: { type: "streamid", required: true },
+      message: { type: "string", required: true },
+      editedAt: { type: "datetime", required: false },
+      senderId: { type: "streamid", required: true },
+      createdAt: { type: "datetime", required: true },
+      room: {
+        type: "view",
+        viewType: "relation",
+        relation: {
+          source: "document",
+          model:
+            "kjzl6hvfrbw6cah3f8dtbnge3b38xss2g5twhjtvi5zovfn51fvuhomxyhp1770",
+          property: "roomId",
+        },
+      },
+      sender: {
+        type: "view",
+        viewType: "relation",
+        relation: {
+          source: "document",
+          model:
+            "kjzl6hvfrbw6c9pdj2lt4zen2gx33ztcwyhvu6ygb3x6537867blkez0fi8a4nc",
+          property: "senderId",
+        },
+      },
+    },
+    PublicEncryptionDID: {
+      PublicEncryptionDID: { type: "did", required: true },
+      author: { type: "view", viewType: "documentAccount" },
     },
   },
   enums: {},
   accountData: {
     roomList: { type: "connection", name: "Room" },
-    messageList: { type: "connection", name: "Message" },
     tartarusProfile: { type: "node", name: "TartarusProfile" },
+    messageList: { type: "connection", name: "Message" },
+    publicEncryptionDidList: {
+      type: "connection",
+      name: "PublicEncryptionDID",
+    },
   },
 };
