@@ -6,6 +6,7 @@ import {
   type NormalizedCacheObject,
 } from "@apollo/client";
 import { loadErrorMessages } from "@apollo/client/dev";
+import { type ILitNodeClient } from "@lit-protocol/types";
 import { DIDSession } from "did-session";
 import { type AppType } from "next/dist/shared/lib/utils";
 import Head from "next/head";
@@ -31,6 +32,16 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 
   // Adds messages only in a dev environment
   loadErrorMessages();
+
+  const startLitClient = (window: Window): ILitNodeClient => {
+    // connect to lit
+    console.log("Starting Lit Client...");
+    const client = new LitJsSdk.LitNodeClient({
+      url: window.location.origin,
+    });
+    client.connect();
+    return client as ILitNodeClient;
+  };
 
   useEffect(() => {
     if (sessionDid && ethProvider && !client) {
