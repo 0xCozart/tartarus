@@ -26,7 +26,7 @@ export default function Home() {
       void getProfile();
     } else {
       console.log({
-        pic: profileData?.viewer?.tartarusProfile?.profilePicture,
+        pic: profileData?.viewer?.tartarusProfile?.profilePictureCid,
       });
     }
   }, [profileData, getProfile]);
@@ -59,7 +59,7 @@ export default function Home() {
                 i: {
                   id: profileData?.viewer?.tartarusProfile?.id,
                   content: {
-                    profilePicture: res,
+                    profilePictureCid: res,
                   },
                 },
               },
@@ -79,7 +79,7 @@ export default function Home() {
     file,
     profileData?.viewer?.tartarusProfile?.id,
     updateProfile,
-    profileData?.viewer?.tartarusProfile?.profilePicture,
+    profileData?.viewer?.tartarusProfile?.profilePictureCid,
   ]);
 
   if (profileData?.viewer?.tartarusProfile?.displayName) {

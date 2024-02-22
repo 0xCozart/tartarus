@@ -1,3 +1,4 @@
+import { type ILitNodeClient } from "@lit-protocol/types";
 import Image from "next/image";
 import {
   useRef,
@@ -10,6 +11,7 @@ import { type TartarusProfile } from "~/__generated__/graphql";
 type MainChatProps = {
   tartarusProfile: TartarusProfile;
   setFile: Dispatch<SetStateAction<File | undefined>>;
+  lit: ILitNodeClient;
 };
 
 function MainChat({ tartarusProfile, setFile }: MainChatProps) {
